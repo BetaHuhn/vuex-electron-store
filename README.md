@@ -212,7 +212,7 @@ If you want to overwrite the entire state, not just arrays, set the [`overwrite`
 
 ---
 
-### Overwritting the existing state
+### Overwriting the existing state
 
 By default the existing state will be merged with the persisted state using [deepmerge](https://github.com/TehShrike/deepmerge). You can disable this behaviour and instead directly overwrite the existing state with the persisted state using the `overwrite` option:
 

@@ -14,7 +14,7 @@ class PersistedState {
 		const defaultOptions: any = {
 			fileName: 'vuex',
 			storageKey: 'state',
-			paths: [],
+			paths: undefined,
 			filter: undefined,
 			reducer: reducer,
 			arrayMerger: combineMerge,

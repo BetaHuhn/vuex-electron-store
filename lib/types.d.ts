@@ -5,7 +5,7 @@ export interface Options {
     storageKey?: string;
     paths?: string[];
     filter?: (mutation: MutationPayload) => boolean;
-    reducer?: (state: any, paths: string[]) => Record<string, unknown>;
+    reducer?: (state: any, paths: string[] | undefined) => Record<string, unknown>;
     arrayMerger?: (target: any[], source: any[], options: any) => any;
     overwrite?: boolean;
     checkStorage?: boolean;
@@ -14,9 +14,9 @@ export interface Options {
 export interface FinalOptions {
     fileName: string;
     storageKey: string;
-    paths: string[];
+    paths?: string[];
     filter?: (mutation: MutationPayload) => boolean;
-    reducer: (state: any, paths: string[]) => Record<string, unknown>;
+    reducer: (state: any, paths: string[] | undefined) => Record<string, unknown>;
     arrayMerger: (target: any[], source: any[], options: any) => any;
     overwrite: boolean;
     checkStorage: boolean;

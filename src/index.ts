@@ -12,7 +12,7 @@ class PersistedState {
 
 	constructor(opts: Options, store: VuexStore<any>) {
 		const defaultOptions: any = {
-			key: 'vuex',
+			fileName: 'vuex',
 			storageKey: 'state',
 			paths: [],
 			filter: undefined,
@@ -24,7 +24,7 @@ class PersistedState {
 
 		if (!opts.storage) {
 			defaultOptions.storage = new Store({
-				name: defaultOptions.key
+				name: defaultOptions.fileName
 			})
 		}
 
@@ -53,12 +53,12 @@ class PersistedState {
 	}
 
 	loadInitialState(): void {
-		const state = this.getState()
-		if (!state) return
+		const persistedState = this.getState()
+		if (!persistedState) return
 
-		if (this.opts.overwrite) return this.store.replaceState(state)
+		if (this.opts.overwrite) return this.store.replaceState(persistedState)
 
-		const mergedState = merge(this.store.state, state, {
+		const mergedState = merge(this.store.state, persistedState, {
 			arrayMerge: this.opts.arrayMerger
 		})
 

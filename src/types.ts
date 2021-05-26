@@ -3,7 +3,7 @@ import Store from 'electron-store'
 import { MutationPayload } from 'vuex'
 
 export interface Options {
-	key?: string;
+	fileName?: string;
 	storageKey?: string;
 	paths?: string[];
 	filter?: (mutation: MutationPayload) => boolean;
@@ -15,7 +15,7 @@ export interface Options {
 }
 
 export interface FinalOptions {
-	key: string;
+	fileName: string;
 	storageKey: string;
 	paths: string[];
 	filter?: (mutation: MutationPayload) => boolean;

@@ -1,21 +1,227 @@
 <div align="center">
   
-# 💻 Node TypeScript Starter
+# 💾 Vuex Electron Store
 
 [![Node CI](https://github.com/BetaHuhn/vuex-electron-store/workflows/Node%20CI/badge.svg)](https://github.com/BetaHuhn/vuex-electron-store/actions?query=workflow%3A%22Node+CI%22) [![Release CI](https://github.com/BetaHuhn/vuex-electron-store/workflows/Release%20CI/badge.svg)](https://github.com/BetaHuhn/vuex-electron-store/actions?query=workflow%3A%22Release+CI%22) [![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/BetaHuhn/vuex-electron-store/blob/master/LICENSE) ![David](https://img.shields.io/david/betahuhn/vuex-electron-store)
 
-Starter repo for Node.js Typescript project
+Persist and rehydrate your Vuex state in your Electron app.
 
 </div>
 
-## 🚀 Features
+## 👋 Introduction
 
-- Semantic Release to GitHub and NPM (via GitHub Actions)
-- Linting with [Eslint](https://eslint.org/)
-- Automatic Dependabot PR merging (via GitHub Actions)
-- TypeScript already setup
+[Vuex Electron Store](https://github.com/BetaHuhn/vuex-electron-store) integrates perfectly with Vuex and Electron and persistently stores your state between app restarts. You can customize which specific state you want to persist and even filter the mutations which are allowed to persist their state. The data is saved in a JSON file stored the users [appData directory](https://www.electronjs.org/docs/api/app#appgetpathname).
+
+This library is basically a wrapper around [electron-store](https://github.com/sindresorhus/electron-store) to make it work directly with Vuex.
+
+## 🚀 Get started
+
+```shell
+npm install vuex-electron-store
+```
+
+*Requires Electron 11 or later and currently only works with Vue 2*
+
+## 📚 Usage
+
+To use [vuex-electron-store](https://github.com/BetaHuhn/vuex-electron-store), add it as a plugin to your Vuex store:
+
+```js
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+import PersistedState from 'vuex-electron-store'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  // ...
+  plugins: [
+    PersistedState.create()
+  ],
+  // ...
+})
+```
+
+> You can use this module directly in both the main and renderer process. For use in the renderer process only, you need to call PersistedState.initRenderer() in the main process as well.
+
+You can also pass an options object to `.create()` to customize the behaviour of [vuex-electron-store](https://github.com/BetaHuhn/vuex-electron-store) further:
+
+```js
+PersistedState.create({
+    paths: [ 'auth.user' ]
+})
+```
+
+See all available options [below](#).
+
+## ⚙️ Options
+
+Here are all the options [vuex-electron-store](https://github.com/BetaHuhn/vuex-electron-store) supports:
+
+| Name | Type | Description | Default |
+| ------------- | ------------- | ------------- | ------------- |
+| `fileName` | `string` | Name of the storage file (without extension) | `vuex` |
+| `paths` | `array` | An array of any paths to partially persist the state. If no paths are given, the complete state is persisted. If an empty array is given, no state is persisted. Paths must be specified using dot notation e.g. `user.name` | n/a |
+| `filter` | `function` | Will be called to filter any mutations which will trigger `setState` on storage eventually | `() => true` |
+| `overwrite` | `boolean` | When rehydrating, whether to overwrite the existing state with the persisted state directly, instead of merging the two objects with `deepmerge` | `false` |
+| `storageKey` | `string` | Key for the stored state object | `state` |
+| `checkStorage` | `boolean` | Check during the plugin's initialization if storage is available. A Write-Read-Delete operation will be performed | `true` |
+| `reducer` | `function` | Will be called with the state and the paths as parameters to reduce the state to persist based on the given paths. Output will be persisted | Defaults to include the specified paths |
+| `arrayMerger` | `function` | A function for merging arrays when rehydrating state. Will be passed as the [arrayMerge](https://github.com/TehShrike/deepmerge#arraymerge) argument to `deepmerge` | Defaults to combine the existing state with the persisted state |
+
+See below for some [examples](#).
+
+## 📖 Examples
+
+Here are a few examples to help you get started!
+
+### Basic Example
+
+In this example the entire state will be persisted and rehydrated after a restart:
+
+```js
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+import PersistedState from 'vuex-electron-store'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  // ...
+  state: {
+    username: 'BetaHuhn',
+    repository: 'https://github.com/BetaHuhn/vuex-electron-store'
+  }
+  plugins: [
+    PersistedState.create()
+  ],
+  // ...
+})
+```
+
+---
+
+### Only partially persist state
+
+In this example only part of the state will be persisted and rehydrated after a restart:
+
+```js
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+import PersistedState from 'vuex-electron-store'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  // ...
+  state: {
+    input: ''
+    user: {
+        token: ''
+    }
+  }
+  plugins: [
+    PersistedState.create({
+        paths: [ 'user.token' ]
+    })
+  ],
+  // ...
+})
+```
+
+Here, only the `user.token` will be persisted and rehydrated.
+
+---
+
+### Filter mutations
+
+In this example we add a filter to specify which mutations can persist the updated state:
+
+```js
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+import PersistedState from 'vuex-electron-store'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  // ...
+  mutations: {
+    // ...
+    increment (state) {
+      // mutate state
+      state.count++
+    },
+    decrement (state) {
+      // mutate state
+      state.count--
+    }
+  }
+  plugins: [
+    PersistedState.create({
+        filter: (name) => name === 'increment'
+    })
+  ],
+  // ...
+})
+```
+
+Here, only state changed by the `increment` mutation will be persisted and rehydrated.
+
+---
+
+### Merging arrays
+
+By default arrays from the existing state will be merged with arrays from the persisted state. You change this behaviour by specifying a different [`arrayMerger`](https://github.com/TehShrike/deepmerge#arraymerge) function which [deepmerge](https://github.com/TehShrike/deepmerge) will use to merge the two arrays.
+
+```js
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+import PersistedState from 'vuex-electron-store'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  // ...
+  state: {
+    todos: [ 'test1', 'test2' ]
+  }
+  plugins: [
+    PersistedState.create({
+        arrayMerger: (stateArray, persistedStateArray, options) => { /* ... */ }
+    })
+  ],
+  // ...
+})
+```
+
+Use the function below to overwrite the existing arrays with the persisted arrays:
+
+```js
+const overwriteMerge = (stateArray, persistedStateArray, options) => persistedStateArray
+```
+
+If you want to overwrite the entire state, not just arrays, set the `overwrite` option to `true` instead.
+
+---
+
+## 📝 Todo
+
+- [ ] Support [migrations](https://github.com/sindresorhus/electron-store#migrations)
+- [ ] Support [encrypting](https://github.com/sindresorhus/electron-store#encryptionkey) the storage file
+- [ ] Support [changing the storage file location](https://github.com/sindresorhus/electron-store#cwd)
+- [ ] Create modified version for Vue 3
+
+Feel free to create a PR!
 
 ## 💻 Development
+
+Issues and PRs are very welcome!
 
 - run `yarn lint` or `npm run lint` to run eslint.
 - run `yarn watch` or `npm run watch` to watch for changes.
@@ -28,6 +234,10 @@ This project was developed by me ([@betahuhn](https://github.com/BetaHuhn)) in m
 [![Donate via PayPal](https://img.shields.io/badge/paypal-donate-009cde.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=394RTSBEEEFEE)
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/F1F81S2RK)
+
+### Credit
+
+This library is a wrapper around the great [electron-store](https://github.com/sindresorhus/electron-store) by @sindresorhus and was inspired by [vuex-electron](https://github.com/vue-electron/vuex-electron) and [vuex-persistedstate](https://github.com/robinvdvleuten/vuex-persistedstate).
 
 ## 📄 License
 

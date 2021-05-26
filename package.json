@@ -1,0 +1,55 @@
+{
+	"name": "vuex-electron-store",
+	"version": "0.1.0-beta",
+	"description": "",
+	"main": "./lib/index.js",
+	"types": "./lib/index.d.ts",
+	"files": [
+		"lib"
+	],
+	"scripts": {
+		"lint": "eslint ./src/ --ext .ts",
+		"watch": "tsc-watch --onSuccess \"node ./lib/index.js\"",
+		"build": "tsc -p tsconfig.json"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/BetaHuhn/vuex-electron-store.git"
+	},
+	"bugs": {
+		"url": "https://github.com/BetaHuhn/vuex-electron-store/issues"
+	},
+	"homepage": "https://github.com/BetaHuhn/vuex-electron-store#readme",
+	"author": "Maximilian Schiller <schiller@mxis.ch>",
+	"license": "MIT",
+	"keywords": [
+		"electron",
+		"typescript",
+		"vuejs",
+		"vuex"
+	],
+	"dependencies": {
+		"deepmerge": "^4.2.2",
+		"dot-prop": "^6.0.1",
+		"electron-store": "^8.0.0"
+	},
+	"devDependencies": {
+		"@betahuhn/config": "^1.1.0",
+		"@types/node": "^15.6.1",
+		"@typescript-eslint/eslint-plugin": "^4.24.0",
+		"@typescript-eslint/parser": "^4.24.0",
+		"eslint": "^7.26.0",
+		"ts-node": "^9.1.1",
+		"tsc-watch": "^4.2.9",
+		"typescript": "^4.2.4",
+		"vue": "^2.6.12",
+		"vuex": "^3.6.2"
+	},
+	"peerDependencies": {
+		"vue": "^2.0.0",
+		"vuex": "^2.0.0 || ^3.0.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
+}

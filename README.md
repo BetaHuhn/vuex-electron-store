@@ -43,7 +43,7 @@ export default new Vuex.Store({
 })
 ```
 
-> You can use this module directly in both the main and renderer process. For use in the renderer process only, you need to call PersistedState.initRenderer() in the main process as well.
+> You can use this module directly in both the main and renderer process. For use in the renderer process only, you need to call PersistedState.initRenderer() in the main process as well. More info [here](https://github.com/sindresorhus/electron-store#initrenderer)
 
 You can also pass an options object to `.create()` to customize the behaviour of [vuex-electron-store](https://github.com/BetaHuhn/vuex-electron-store) further:
 
@@ -53,7 +53,7 @@ PersistedState.create({
 })
 ```
 
-See all available options [below](#).
+See all available options [below](#%EF%B8%8F-options).
 
 ## ⚙️ Options
 
@@ -63,18 +63,20 @@ Here are all the options [vuex-electron-store](https://github.com/BetaHuhn/vuex-
 | ------------- | ------------- | ------------- | ------------- |
 | `fileName` | `string` | Name of the storage file (without extension) | `vuex` |
 | `paths` | `array` | An array of any paths to partially persist the state. If no paths are given, the complete state is persisted. If an empty array is given, no state is persisted. Paths must be specified using dot notation e.g. `user.name` | n/a |
-| `filter` | `function` | Will be called to filter any mutations which will trigger `setState` on storage eventually | `() => true` |
-| `overwrite` | `boolean` | When rehydrating, whether to overwrite the existing state with the persisted state directly, instead of merging the two objects with `deepmerge` | `false` |
+| `filter` | `function` | Will be called to filter any mutations which will trigger `setState` on storage eventually | n/a |
+| `overwrite` | `boolean` | When rehydrating, whether to overwrite the existing state with the persisted state directly, instead of merging the two objects with [`deepmerge`](https://github.com/TehShrike/deepmerge) | `false` |
 | `storageKey` | `string` | Key for the stored state object | `state` |
 | `checkStorage` | `boolean` | Check during the plugin's initialization if storage is available. A Write-Read-Delete operation will be performed | `true` |
 | `reducer` | `function` | Will be called with the state and the paths as parameters to reduce the state to persist based on the given paths. Output will be persisted | Defaults to include the specified paths |
 | `arrayMerger` | `function` | A function for merging arrays when rehydrating state. Will be passed as the [arrayMerge](https://github.com/TehShrike/deepmerge#arraymerge) argument to `deepmerge` | Defaults to combine the existing state with the persisted state |
 
-See below for some [examples](#).
+See below for some [examples](#-examples).
 
 ## 📖 Examples
 
 Here are a few examples to help you get started!
+
+---
 
 ### Basic Example
 
@@ -176,7 +178,7 @@ Here, only state changed by the `increment` mutation will be persisted and rehyd
 
 ### Merging arrays
 
-By default arrays from the existing state will be merged with arrays from the persisted state. You change this behaviour by specifying a different [`arrayMerger`](https://github.com/TehShrike/deepmerge#arraymerge) function which [deepmerge](https://github.com/TehShrike/deepmerge) will use to merge the two arrays.
+By default arrays from the existing state will be merged with arrays from the persisted state. You can change this behaviour by specifying a different [`arrayMerger`](https://github.com/TehShrike/deepmerge#arraymerge) function which [deepmerge](https://github.com/TehShrike/deepmerge) will use to merge the two arrays.
 
 ```js
 import Vue from 'vue'
@@ -206,7 +208,35 @@ Use the function below to overwrite the existing arrays with the persisted array
 const overwriteMerge = (stateArray, persistedStateArray, options) => persistedStateArray
 ```
 
-If you want to overwrite the entire state, not just arrays, set the `overwrite` option to `true` instead.
+If you want to overwrite the entire state, not just arrays, set the [`overwrite`](#%EF%B8%8F-options) option to `true` instead.
+
+---
+
+### Overwritting the existing state
+
+By default the existing state will be merged with the persisted state using [deepmerge](https://github.com/TehShrike/deepmerge). You can disable this behaviour and instead directly overwrite the existing state with the persisted state using the `overwrite` option:
+
+```js
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+import PersistedState from 'vuex-electron-store'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  // ...
+  state: {
+    username: 'BetaHuhn'
+  }
+  plugins: [
+    PersistedState.create({
+        overwrite: true
+    })
+  ],
+  // ...
+})
+```
 
 ---
 
@@ -215,9 +245,10 @@ If you want to overwrite the entire state, not just arrays, set the `overwrite` 
 - [ ] Support [migrations](https://github.com/sindresorhus/electron-store#migrations)
 - [ ] Support [encrypting](https://github.com/sindresorhus/electron-store#encryptionkey) the storage file
 - [ ] Support [changing the storage file location](https://github.com/sindresorhus/electron-store#cwd)
+- [ ] Resetting the persisted state programmatically
 - [ ] Create modified version for Vue 3
 
-Feel free to create a PR!
+Feel free to create a PR if you need one of the mentioned features!
 
 ## 💻 Development
 
@@ -237,7 +268,7 @@ This project was developed by me ([@betahuhn](https://github.com/BetaHuhn)) in m
 
 ### Credit
 
-This library is a wrapper around the great [electron-store](https://github.com/sindresorhus/electron-store) by @sindresorhus and was inspired by [vuex-electron](https://github.com/vue-electron/vuex-electron) and [vuex-persistedstate](https://github.com/robinvdvleuten/vuex-persistedstate).
+This library is a wrapper around the great [electron-store](https://github.com/sindresorhus/electron-store) by [@sindresorhus](https://github.com/sindresorhus) and was inspired by [vuex-electron](https://github.com/vue-electron/vuex-electron) and [vuex-persistedstate](https://github.com/robinvdvleuten/vuex-persistedstate).
 
 ## 📄 License
 

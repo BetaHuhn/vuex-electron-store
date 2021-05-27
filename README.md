@@ -70,6 +70,7 @@ Here are all the options [vuex-electron-store](https://github.com/BetaHuhn/vuex-
 | `reducer` | `function` | Will be called with the state and the paths as parameters to reduce the state to persist based on the given paths. Output will be persisted | Defaults to include the specified paths |
 | `arrayMerger` | `function` | A function for merging arrays when rehydrating state. Will be passed as the [arrayMerge](https://github.com/TehShrike/deepmerge#arraymerge) argument to `deepmerge` | Defaults to combine the existing state with the persisted state |
 | `encryptionKey` | `string/Buffer/TypedArray/DataView` | Will be used to encrypt the storage file. Only secure if you don't store the key in plain text ([more info](https://github.com/sindresorhus/electron-store#encryptionkey)) | n/a |
+| `storageFileLocation` | `string` | Location where the storage file should be stored. If a relative path is provided, it will be relative to the default cwd. Don't specify this unless absolutely necessary ([more info](https://github.com/sindresorhus/electron-store#cwd)) | Defaults to optimal location based on system conventions |
 
 See below for some [examples](#-examples).
 
@@ -244,7 +245,6 @@ export default new Vuex.Store({
 ## 📝 Todo
 
 - [ ] Support [migrations](https://github.com/sindresorhus/electron-store#migrations)
-- [ ] Support [changing the storage file location](https://github.com/sindresorhus/electron-store#cwd)
 - [ ] Resetting the persisted state programmatically
 - [ ] Create modified version for Vue 3
 

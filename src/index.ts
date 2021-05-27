@@ -23,7 +23,8 @@ class PersistedState {
 		if (!opts.storage) {
 			defaultOptions.storage = new Store({
 				name: defaultOptions.fileName,
-				...(opts.encryptionKey && { encryptionKey: opts.encryptionKey })
+				...(opts.encryptionKey && { encryptionKey: opts.encryptionKey }),
+				...(opts.storageFileLocation && { cwd: opts.storageFileLocation })
 			})
 		}
 

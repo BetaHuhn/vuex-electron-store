@@ -10,6 +10,7 @@ export interface Options {
     arrayMerger?: (target: any[], source: any[], options: any) => any;
     overwrite?: boolean;
     checkStorage?: boolean;
+    storageFileLocation?: string;
     encryptionKey?: string | Buffer | NodeJS.TypedArray | DataView;
     storage?: Store;
 }
@@ -22,6 +23,7 @@ export interface FinalOptions {
     arrayMerger: (target: any[], source: any[], options: any) => any;
     overwrite: boolean;
     checkStorage: boolean;
+    storageFileLocation?: string;
     encryptionKey?: string | Buffer | NodeJS.TypedArray | DataView;
     storage: Store;
 }

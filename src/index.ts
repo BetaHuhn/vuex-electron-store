@@ -1,16 +1,19 @@
 import merge from 'deepmerge'
 import Store from 'electron-store'
-import { Store as VuexStore, MutationPayload } from 'vuex'
+import { Store as VuexStore, MutationPayload, Plugin } from 'vuex'
 
 import { reducer, combineMerge } from './helpers'
 import { Options, FinalOptions } from './types'
 
+/**
+* Persist and rehydrate your [Vuex](https://vuex.vuejs.org/) state in your [Electron](https://electronjs.org) app
+*/
 class PersistedState<State extends Record<string, any> = Record<string, unknown>> {
 
-	opts: FinalOptions<State>
+	opts: FinalOptions<any>
 	store: VuexStore<any>
 
-	constructor(opts: Options<State>, store: VuexStore<any>) {
+	constructor(inputOpts: Options<State>, store: VuexStore<State>) {
 		const defaultOptions: any = {
 			fileName: 'vuex',
 			storageKey: 'state',
@@ -20,16 +23,16 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 			checkStorage: true
 		}
 
-		if (!opts.storage) {
+		if (!inputOpts.storage) {
 			defaultOptions.storage = new Store({
 				name: defaultOptions.fileName,
-				...(opts.encryptionKey && { encryptionKey: opts.encryptionKey }),
-				...(opts.storageFileLocation && { cwd: opts.storageFileLocation }),
-				...(opts.migrations && { migrations: opts.migrations })
+				...(inputOpts.encryptionKey && { encryptionKey: inputOpts.encryptionKey }),
+				...(inputOpts.storageFileLocation && { cwd: inputOpts.storageFileLocation }),
+				...(inputOpts.migrations && { migrations: inputOpts.migrations })
 			})
 		}
 
-		this.opts = Object.assign({}, defaultOptions, opts)
+		this.opts = Object.assign({}, defaultOptions, inputOpts)
 		this.store = store
 	}
 
@@ -74,7 +77,29 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 		})
 	}
 
-	static create <State>(options: Options<State> = {}): any {
+	/**
+	 * Create a new Vuex plugin which initializes the [electron-store](https://github.com/sindresorhus/electron-store), rehydrates the state and persistently stores any changes
+	 * @param {Options} Options - Configuration options
+	 * @returns The Vuex Plugin
+	 * @example
+		```
+		import Vue from 'vue'
+		import Vuex from 'vuex'
+
+		import PersistedState from 'vuex-electron-store'
+
+		Vue.use(Vuex)
+
+		export default new Vuex.Store({
+			// ...
+			plugins: [
+				PersistedState.create()
+			],
+			// ...
+		})
+		```
+	*/
+	static create <State>(options: Options<State> = {}): Plugin<State> {
 		return (store: VuexStore<State>) => {
 			const persistedState = new PersistedState(options, store)
 
@@ -87,6 +112,9 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 		}
 	}
 
+	/**
+	* Initializer to set up the required `ipc` communication channels for the module when a `PersistedState` instance is not created in the main process and you are creating a `PersistedState` instance in the Electron renderer process only.
+	*/
 	static initRenderer(): void {
 		Store.initRenderer()
 	}

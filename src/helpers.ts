@@ -2,7 +2,9 @@
 import dotProp from 'dot-prop'
 import merge from 'deepmerge'
 
-export const combineMerge = (target: any[], source: any[], options: any): any[] => {
+import { Reducer, ArrayMerger } from './types'
+
+export const combineMerge: ArrayMerger = (target, source, options) => {
 	const destination = target.slice()
 
 	source.forEach((item, index) => {
@@ -18,7 +20,7 @@ export const combineMerge = (target: any[], source: any[], options: any): any[] 
 	return destination
 }
 
-export const reducer = (state: any, paths: string[]): any => {
+export const reducer: Reducer = (state, paths) => {
 	if (Array.isArray(paths)) {
 		return paths.reduce((substate, path) => {
 			return dotProp.set(substate, path, dotProp.get(state, path))

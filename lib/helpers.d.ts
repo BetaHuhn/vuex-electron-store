@@ -1,2 +1,3 @@
-export declare const combineMerge: (target: any[], source: any[], options: any) => any[];
-export declare const reducer: (state: any, paths: string[]) => any;
+import { Reducer, ArrayMerger } from './types';
+export declare const combineMerge: ArrayMerger;
+export declare const reducer: Reducer;

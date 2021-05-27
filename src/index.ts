@@ -5,12 +5,12 @@ import { Store as VuexStore, MutationPayload } from 'vuex'
 import { reducer, combineMerge } from './helpers'
 import { Options, FinalOptions } from './types'
 
-class PersistedState {
+class PersistedState<State extends Record<string, any> = Record<string, unknown>> {
 
-	opts: FinalOptions
+	opts: FinalOptions<State>
 	store: VuexStore<any>
 
-	constructor(opts: Options, store: VuexStore<any>) {
+	constructor(opts: Options<State>, store: VuexStore<any>) {
 		const defaultOptions: any = {
 			fileName: 'vuex',
 			storageKey: 'state',
@@ -73,8 +73,8 @@ class PersistedState {
 		})
 	}
 
-	static create(options: Options = {}): any {
-		return (store: VuexStore<any>) => {
+	static create <State>(options: Options<State> = {}): any {
+		return (store: VuexStore<State>) => {
 			const persistedState = new PersistedState(options, store)
 
 			if (persistedState.opts.checkStorage) {

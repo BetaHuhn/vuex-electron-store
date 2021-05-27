@@ -251,6 +251,14 @@ Don't store the key like this if security is of concern, the encryption key woul
 
 Here are a few examples to help you get started!
 
+Before you use any of them, make sure you initialize the module in the [Electron main process](https://www.electronjs.org/docs/tutorial/quick-start#run-the-main-process):
+
+```js
+import PersistedState from 'vuex-electron-store'
+
+PersistedState.initRenderer()
+```
+
 ### Basic Example
 
 In this example the entire state will be persisted and rehydrated after a restart:

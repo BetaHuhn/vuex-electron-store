@@ -13,7 +13,7 @@ Persist and rehydrate the Vuex state in your Electron app.
 - 💾 **Persistent state** - *persistently stores the Vuex state in your Electron app*
 - 🔌 **Easy integration** - *integrates perfectly with Vue and Electron as a [Vuex Plugin](https://vuex.vuejs.org/guide/plugins.html)*
 - 🔨 **Customization** - *specify what [parts of your Vuex state](#only-partially-persist-state) you want to persist and [which mutations are allowed](#filter-mutations)*
-- ♻️ **Migration between versions** - *the persisted state can be easily [migrated](#migration-between-versions) between different versions of your Electron app*
+- ♻️ **Migration** - *the persisted state can be easily [migrated](#migration-between-versions) between different versions of your Electron app*
 - 🔐 **Encryption** - *you can optionally [encrypt](#%EF%B8%8F-options) the storage file with a encryption key*
 
 This library is a wrapper around [electron-store](https://github.com/sindresorhus/electron-store) to make it work directly with Vuex and offer additional features.

@@ -12,7 +12,7 @@ Persist and rehydrate your Vuex state in your Electron app.
 
 [Vuex Electron Store](https://github.com/BetaHuhn/vuex-electron-store) integrates perfectly with Vuex and Electron and persistently stores your state between app restarts. You can customize which [specific state](#only-partially-persist-state) you want to persist and even [filter the mutations](#filter-mutations) which are allowed to persist their state. The data is saved in a JSON file stored the users [appData directory](https://www.electronjs.org/docs/api/app#appgetpathname) and can be [migrated between versions](#migration-between-versions).
 
-This library is basically a wrapper around [electron-store](https://github.com/sindresorhus/electron-store) to make it work directly with Vuex and supports most of it's features like [encryption](https://github.com/sindresorhus/electron-store#encryptionkey) and [migrations](https://github.com/sindresorhus/electron-store#migrations).
+This library is basically a wrapper around [electron-store](https://github.com/sindresorhus/electron-store) to make it work directly with Vuex and supports most of it's features like [encryption](#%EF%B8%8F-options) and [migrations](#migration-between-versions).
 
 ## 🚀 Get started
 
@@ -35,11 +35,11 @@ import PersistedState from 'vuex-electron-store'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  // ...
-  plugins: [
-    PersistedState.create()
-  ],
-  // ...
+	// ...
+	plugins: [
+		PersistedState.create()
+	],
+	// ...
 })
 ```
 
@@ -57,7 +57,7 @@ You can also pass an options object to `.create()` to customize the behaviour of
 
 ```js
 PersistedState.create({
-    paths: [ 'auth.user' ]
+	paths: [ 'auth.user' ]
 })
 ```
 
@@ -79,7 +79,7 @@ Here are all the options [vuex-electron-store](https://github.com/BetaHuhn/vuex-
 | `arrayMerger` | `function` | A function for merging arrays when rehydrating state. Will be passed as the [arrayMerge](https://github.com/TehShrike/deepmerge#arraymerge) argument to `deepmerge` | Defaults to combine the existing state with the persisted state |
 | `encryptionKey` | `string/Buffer/TypedArray/DataView` | Will be used to encrypt the storage file. Only secure if you don't store the key in plain text ([more info](https://github.com/sindresorhus/electron-store#encryptionkey)) | n/a |
 | `storageFileLocation` | `string` | Location where the storage file should be stored. If a relative path is provided, it will be relative to the default cwd. Don't specify this unless absolutely necessary ([more info](https://github.com/sindresorhus/electron-store#cwd)) | Defaults to optimal location based on system conventions |
-| `migrations` | `object` | Migration operations to perform to the persisted data whenever a version is upgraded. The migrations object should consist of a key-value pair of `'version': handler` ([more info](https://github.com/sindresorhus/electron-store#migrations)) | n/a |
+| `migrations` | `object` | Migration operations to perform to the persisted data whenever a version is upgraded. The migrations object should consist of a key-value pair of `'version': handler` | n/a |
 
 See below for some [examples](#-examples).
 
@@ -102,15 +102,15 @@ import PersistedState from 'vuex-electron-store'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  // ...
-  state: {
-    username: 'BetaHuhn',
-    repository: 'https://github.com/BetaHuhn/vuex-electron-store'
-  }
-  plugins: [
-    PersistedState.create()
-  ],
-  // ...
+	// ...
+	state: {
+		username: 'BetaHuhn',
+		repository: 'https://github.com/BetaHuhn/vuex-electron-store'
+	}
+	plugins: [
+		PersistedState.create()
+	],
+	// ...
 })
 ```
 
@@ -129,19 +129,19 @@ import PersistedState from 'vuex-electron-store'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  // ...
-  state: {
-    input: ''
-    user: {
-        token: ''
-    }
-  }
-  plugins: [
-    PersistedState.create({
-        paths: [ 'user.token' ]
-    })
-  ],
-  // ...
+	// ...
+	state: {
+		input: ''
+		user: {
+			token: ''
+		}
+	}
+	plugins: [
+		PersistedState.create({
+			paths: ['user.token']
+		})
+	],
+	// ...
 })
 ```
 
@@ -162,24 +162,24 @@ import PersistedState from 'vuex-electron-store'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  // ...
-  mutations: {
-    // ...
-    increment (state) {
-      // mutate state
-      state.count++
-    },
-    decrement (state) {
-      // mutate state
-      state.count--
-    }
-  }
-  plugins: [
-    PersistedState.create({
-        filter: (name) => name === 'increment'
-    })
-  ],
-  // ...
+	// ...
+	mutations: {
+		// ...
+		increment(state) {
+			// mutate state
+			state.count++
+		},
+		decrement(state) {
+			// mutate state
+			state.count--
+		}
+	}
+	plugins: [
+		PersistedState.create({
+			filter: (name) => name === 'increment'
+		})
+	],
+	// ...
 })
 ```
 
@@ -200,16 +200,17 @@ import PersistedState from 'vuex-electron-store'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  // ...
-  state: {
-    todos: [ 'test1', 'test2' ]
-  }
-  plugins: [
-    PersistedState.create({
-        arrayMerger: (stateArray, persistedStateArray, options) => { /* ... */ }
-    })
-  ],
-  // ...
+	// ...
+	state: {
+		todos: ['test1', 'test2']
+	}
+	plugins: [
+		PersistedState.create({
+			arrayMerger: (stateArray, persistedStateArray, options) => {
+				/* ... */ }
+		})
+	],
+	// ...
 })
 ```
 
@@ -236,16 +237,16 @@ import PersistedState from 'vuex-electron-store'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  // ...
-  state: {
-    username: 'BetaHuhn'
-  }
-  plugins: [
-    PersistedState.create({
-        overwrite: true
-    })
-  ],
-  // ...
+	// ...
+	state: {
+		username: 'BetaHuhn'
+	}
+	plugins: [
+		PersistedState.create({
+			overwrite: true
+		})
+	],
+	// ...
 })
 ```
 
@@ -253,29 +254,29 @@ export default new Vuex.Store({
 
 ### Migration between versions
 
-You can use migrations to perform operations on the persisted data whenever a version is upgraded. The migrations object should consist of a key-value pair of `'version': handler`:
+You can use migrations to perform operations on the persisted data whenever a version is upgraded. The migrations object should consist of a key-value pair of `'version': handler`. In the handler you can manipulate the state like any other JavaScript object:
 
 ```js
 PersistedState.create({
-  migrations: {
-		'0.0.1': (store) => {
-			store.set('debugPhase', true)
+	migrations: {
+		'0.1.0': (state) => {
+			state.debugPhase = true
 		},
-		'1.0.0': (store) => {
-			store.delete('debugPhase')
-			store.set('phase', '1.0.0')
+		'1.0.0': (state) => {
+			delete state.debugPhase
+			state.phase = '1.0.0'
 		},
-		'1.0.2': (store) => {
-			store.set('phase', '1.0.2')
+		'1.0.2': (state) => {
+			state.phase = '1.0.2'
 		},
-		'>=2.0.0': (store) => {
-			store.set('phase', '>=2.0.0')
+		'>=2.0.0': (state) => {
+			state.phase = '>=2.0.0'
 		}
 	}
 })
 ```
 
-The `store` is a [electron-store](https://github.com/sindresorhus/electron-store) instance which can be used to perform operations on the persisted data. More info [here](https://github.com/sindresorhus/electron-store#migrations).
+> The `state` parameter contains the persisted state before rehydration.
 
 ---
 

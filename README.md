@@ -10,9 +10,9 @@ Persist and rehydrate your Vuex state in your Electron app.
 
 ## 👋 Introduction
 
-[Vuex Electron Store](https://github.com/BetaHuhn/vuex-electron-store) integrates perfectly with Vuex and Electron and persistently stores your state between app restarts. You can customize which specific state you want to persist and even filter the mutations which are allowed to persist their state. The data is saved in a JSON file stored the users [appData directory](https://www.electronjs.org/docs/api/app#appgetpathname).
+[Vuex Electron Store](https://github.com/BetaHuhn/vuex-electron-store) integrates perfectly with Vuex and Electron and persistently stores your state between app restarts. You can customize which [specific state](#only-partially-persist-state) you want to persist and even [filter the mutations](#filter-mutations) which are allowed to persist their state. The data is saved in a JSON file stored the users [appData directory](https://www.electronjs.org/docs/api/app#appgetpathname) and can be [migrated between versions](#migration-between-versions).
 
-This library is basically a wrapper around [electron-store](https://github.com/sindresorhus/electron-store) to make it work directly with Vuex.
+This library is basically a wrapper around [electron-store](https://github.com/sindresorhus/electron-store) to make it work directly with Vuex and supports most of it's features like [encryption](https://github.com/sindresorhus/electron-store#encryptionkey) and [migrations](https://github.com/sindresorhus/electron-store#migrations).
 
 ## 🚀 Get started
 
@@ -63,14 +63,15 @@ Here are all the options [vuex-electron-store](https://github.com/BetaHuhn/vuex-
 | ------------- | ------------- | ------------- | ------------- |
 | `fileName` | `string` | Name of the storage file (without extension) | `vuex` |
 | `paths` | `array` | An array of any paths to partially persist the state. If no paths are given, the complete state is persisted. If an empty array is given, no state is persisted. Paths must be specified using dot notation e.g. `user.name` | n/a |
-| `filter` | `function` | Will be called to filter any mutations which will trigger `setState` on storage eventually | n/a |
+| `filter` | `function` | Will be called on each mutation that triggers `setState` and can be used to filter which mutations can persist their state | n/a |
 | `overwrite` | `boolean` | When rehydrating, whether to overwrite the existing state with the persisted state directly, instead of merging the two objects with [`deepmerge`](https://github.com/TehShrike/deepmerge) | `false` |
-| `storageKey` | `string` | Key for the stored state object | `state` |
+| `storageKey` | `string` | Name of the key used for the stored state object | `state` |
 | `checkStorage` | `boolean` | Check during the plugin's initialization if storage is available. A Write-Read-Delete operation will be performed | `true` |
 | `reducer` | `function` | Will be called with the state and the paths as parameters to reduce the state to persist based on the given paths. Output will be persisted | Defaults to include the specified paths |
 | `arrayMerger` | `function` | A function for merging arrays when rehydrating state. Will be passed as the [arrayMerge](https://github.com/TehShrike/deepmerge#arraymerge) argument to `deepmerge` | Defaults to combine the existing state with the persisted state |
 | `encryptionKey` | `string/Buffer/TypedArray/DataView` | Will be used to encrypt the storage file. Only secure if you don't store the key in plain text ([more info](https://github.com/sindresorhus/electron-store#encryptionkey)) | n/a |
 | `storageFileLocation` | `string` | Location where the storage file should be stored. If a relative path is provided, it will be relative to the default cwd. Don't specify this unless absolutely necessary ([more info](https://github.com/sindresorhus/electron-store#cwd)) | Defaults to optimal location based on system conventions |
+| `migrations` | `object` | Migration operations to perform to the persisted data whenever a version is upgraded. The migrations object should consist of a key-value pair of `'version': handler` ([more info](https://github.com/sindresorhus/electron-store#migrations)) | n/a |
 
 See below for some [examples](#-examples).
 
@@ -242,9 +243,36 @@ export default new Vuex.Store({
 
 ---
 
+### Migration between versions
+
+You can use migrations to perform operations on the persisted data whenever a version is upgraded. The migrations object should consist of a key-value pair of `'version': handler`:
+
+```js
+PersistedState.create({
+  migrations: {
+		'0.0.1': (store) => {
+			store.set('debugPhase', true)
+		},
+		'1.0.0': (store) => {
+			store.delete('debugPhase')
+			store.set('phase', '1.0.0')
+		},
+		'1.0.2': (store) => {
+			store.set('phase', '1.0.2')
+		},
+		'>=2.0.0': (store) => {
+			store.set('phase', '>=2.0.0')
+		}
+	}
+})
+```
+
+The `store` is a [electron-store](https://github.com/sindresorhus/electron-store) instance which can be used to perform operations on the persisted data. More info [here](https://github.com/sindresorhus/electron-store#migrations).
+
+---
+
 ## 📝 Todo
 
-- [ ] Support [migrations](https://github.com/sindresorhus/electron-store#migrations)
 - [ ] Resetting the persisted state programmatically
 - [ ] Create modified version for Vue 3
 

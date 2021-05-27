@@ -9,7 +9,7 @@
 	],
 	"scripts": {
 		"lint": "eslint ./src/ --ext .ts",
-		"watch": "tsc-watch --onSuccess \"node ./lib/index.js\"",
+		"watch": "tsc-watch",
 		"build": "tsc -p tsconfig.json"
 	},
 	"repository": {

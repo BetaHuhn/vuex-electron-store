@@ -14,8 +14,6 @@ class PersistedState {
 		const defaultOptions: any = {
 			fileName: 'vuex',
 			storageKey: 'state',
-			paths: undefined,
-			filter: undefined,
 			reducer: reducer,
 			arrayMerger: combineMerge,
 			overwrite: false,
@@ -24,7 +22,8 @@ class PersistedState {
 
 		if (!opts.storage) {
 			defaultOptions.storage = new Store({
-				name: defaultOptions.fileName
+				name: defaultOptions.fileName,
+				...(opts.encryptionKey && { encryptionKey: opts.encryptionKey })
 			})
 		}
 

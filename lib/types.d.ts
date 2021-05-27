@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import Store from 'electron-store';
 import { MutationPayload } from 'vuex';
 export interface Options {
@@ -9,6 +10,7 @@ export interface Options {
     arrayMerger?: (target: any[], source: any[], options: any) => any;
     overwrite?: boolean;
     checkStorage?: boolean;
+    encryptionKey?: string | Buffer | NodeJS.TypedArray | DataView;
     storage?: Store;
 }
 export interface FinalOptions {
@@ -20,5 +22,6 @@ export interface FinalOptions {
     arrayMerger: (target: any[], source: any[], options: any) => any;
     overwrite: boolean;
     checkStorage: boolean;
+    encryptionKey?: string | Buffer | NodeJS.TypedArray | DataView;
     storage: Store;
 }

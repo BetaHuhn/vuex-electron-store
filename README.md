@@ -69,6 +69,7 @@ Here are all the options [vuex-electron-store](https://github.com/BetaHuhn/vuex-
 | `checkStorage` | `boolean` | Check during the plugin's initialization if storage is available. A Write-Read-Delete operation will be performed | `true` |
 | `reducer` | `function` | Will be called with the state and the paths as parameters to reduce the state to persist based on the given paths. Output will be persisted | Defaults to include the specified paths |
 | `arrayMerger` | `function` | A function for merging arrays when rehydrating state. Will be passed as the [arrayMerge](https://github.com/TehShrike/deepmerge#arraymerge) argument to `deepmerge` | Defaults to combine the existing state with the persisted state |
+| `encryptionKey` | `string/Buffer/TypedArray/DataView` | Will be used to encrypt the storage file. Only secure if you don't store the key in plain text ([more info](https://github.com/sindresorhus/electron-store#encryptionkey)) | n/a |
 
 See below for some [examples](#-examples).
 
@@ -243,7 +244,6 @@ export default new Vuex.Store({
 ## 📝 Todo
 
 - [ ] Support [migrations](https://github.com/sindresorhus/electron-store#migrations)
-- [ ] Support [encrypting](https://github.com/sindresorhus/electron-store#encryptionkey) the storage file
 - [ ] Support [changing the storage file location](https://github.com/sindresorhus/electron-store#cwd)
 - [ ] Resetting the persisted state programmatically
 - [ ] Create modified version for Vue 3

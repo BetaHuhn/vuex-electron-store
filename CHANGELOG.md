@@ -1,3 +1,12 @@
+## [v1.2.0] - 2021-05-27
+
+[Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.2.0) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.1.1...v1.2.0) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.2.0) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.2.0.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.2.0.tar.gz))
+
+### New features
+
+- [`e5b34c4`](https://github.com/BetaHuhn/vuex-electron-store/commit/e5b34c4)  Add development mode
+- [`900783f`](https://github.com/BetaHuhn/vuex-electron-store/commit/900783f)  Use mutation to reset the persisted state
+
 ## [v1.1.1] - 2021-05-27
 
 [Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.1.1) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.1.0...v1.1.1) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.1.1) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.1.1.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.1.1.tar.gz))

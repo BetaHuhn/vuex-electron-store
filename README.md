@@ -104,9 +104,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
 	// ...
 	state: {
-		username: 'BetaHuhn',
-		repository: 'https://github.com/BetaHuhn/vuex-electron-store'
-	}
+		username: ''
+	},
 	plugins: [
 		PersistedState.create()
 	],
@@ -135,7 +134,7 @@ export default new Vuex.Store({
 		user: {
 			token: ''
 		}
-	}
+	},
 	plugins: [
 		PersistedState.create({
 			paths: ['user.token']
@@ -173,7 +172,7 @@ export default new Vuex.Store({
 			// mutate state
 			state.count--
 		}
-	}
+	},
 	plugins: [
 		PersistedState.create({
 			filter: (name) => name === 'increment'
@@ -203,11 +202,10 @@ export default new Vuex.Store({
 	// ...
 	state: {
 		todos: ['test1', 'test2']
-	}
+	},
 	plugins: [
 		PersistedState.create({
-			arrayMerger: (stateArray, persistedStateArray, options) => {
-				/* ... */ }
+			arrayMerger: (stateArray, persistedStateArray, options) => { /* ... */ }
 		})
 	],
 	// ...
@@ -238,9 +236,6 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
 	// ...
-	state: {
-		username: 'BetaHuhn'
-	}
 	plugins: [
 		PersistedState.create({
 			overwrite: true

@@ -99,37 +99,133 @@ You can specify different paths (i.e. parts) of you state with the `paths` optio
 
 If no paths are given, the complete state is persisted. If an empty array is given, no state is persisted.
 
-[See Example](#only-partially-persist-state)
+<details><summary>See Example</summary><br>
+	
+```js
+PersistedState.create({
+	paths: ['user.token']
+})
+```
+
+Here, only the `user.token` will be persisted and rehydrated.
+	
+</details>
+
+---
 
 ### Filter
 
 You can limit the mutations which can persist state with the `filter` function. The specified function will be called on each mutation that triggers `setState`.
 
-[See Example](#filter-mutations)
+<details><summary>See Example</summary><br>
+	
+```js
+PersistedState.create({
+	filter: (name) => name === 'increment'
+})
+```
+
+Here, only state changed by the `increment` mutation will be persisted and rehydrated.
+	
+</details>
+
+---
 
 ### Overwrite
 
 By default the the existing state will be merged using [deepmerge](https://github.com/TehShrike/deepmerge) with the persisted state. If you set `overwrite` to true, the persisted state will overwrite the existing state directly when rehydrating.
 
-[See Example](#overwriting-the-existing-state)
+<details><summary>See Example</summary><br>
+	
+```js
+PersistedState.create({
+	overwrite: true
+})
+```
+	
+</details>
+
+---
 
 ### Development Mode
 
 During development it might be useful to disable persisting and rehydrating the state. You can disable this with the `dev` option. When it is set to true, all changes to the state will not be persisted (regardless of the paths provided), rehydration of the state will be skipped and migrations will not be performed.
 
-[See Example](#during-development)
+<details><summary>See Example</summary><br>
+	
+```js
+PersistedState.create({
+	dev: true
+})
+```
+	
+</details>
+
+---
 
 ### Migrations
 
 You can specify operations to perform to the persisted state whenever a version is upgraded. The `migrations` object should consist of a key-value pair of `'version': handler` (the `version` can also be a [semver range](https://github.com/npm/node-semver#ranges)). In the handler you can manipulate the previously persisted state (just like any other JavaScript object) before it is rehydrated.
 
-[See Example](#migration-between-versions)
+<details><summary>See Example</summary><br>
+	
+```js
+PersistedState.create({
+	migrations: {
+		'0.1.0': (state) => {
+			state.debugPhase = true
+		},
+		'1.0.0': (state) => {
+			delete state.debugPhase
+			state.phase = '1.0.0'
+		},
+		'1.0.2': (state) => {
+			state.phase = '1.0.2'
+		},
+		'>=2.0.0': (state) => {
+			state.phase = '>=2.0.0'
+		}
+	}
+})
+```
+
+The `state` parameter contains the persisted state before rehydration.
+	
+</details>
+
+---
 
 ### Reset Mutation
 
 You can programmatically reset the persisted state by specifying the name of a mutation as the `resetMutation` option. Once you call that mutation, the entire persisted state will be deleted. You have to create a mutation by the same name, even if it doesn't do anything.
 
-[See Example](#reset-mutation)
+<details><summary>See Example</summary><br>
+	
+```js
+PersistedState.create({
+	resetMutation: 'ELECTRON_STORE_RESET'
+})
+```
+	
+You have to create a mutation by the same name, even if it doesn't do anything.:
+	
+```js
+mutations: {
+	ELECTRON_STORE_RESET(state) {
+		// Optionally do something else here
+	}
+}	
+```
+
+Later in a component or somewhere else:
+	
+```js
+this.$store.commit('ELECTRON_STORE_RESET')
+```
+	
+</details>
+
+---
 
 ### Encryption
 
@@ -137,13 +233,23 @@ You can optionally specify an encryption key which will be used to encrypt the s
 
 It might also be useful for obscurity. If a user looks through the config directory and finds the config file, since it's just a JSON file, they may be tempted to modify it. By providing an encryption key, the file will be obfuscated, which should hopefully deter any users from doing so.
 
-[See Example](#encrypting-the-storage-file)
+<details><summary>See Example</summary><br>
+	
+```js
+PersistedState.create({
+	encryptionKey: 'superSecretKey'
+})
+```
+
+Don't store the key like this if security is of concern, the encryption key would be easily found in the Electron app.
+	
+</details>
+
+---
 
 ## 📖 Examples
 
 Here are a few examples to help you get started!
-
----
 
 ### Basic Example
 
@@ -395,22 +501,35 @@ Don't store the key like this if security is of concern, the encryption key woul
 You can use migrations to perform operations on the persisted data whenever a version is upgraded. The migrations object should consist of a key-value pair of `'version': handler`. In the handler you can manipulate the state like any other JavaScript object:
 
 ```js
-PersistedState.create({
-	migrations: {
-		'0.1.0': (state) => {
-			state.debugPhase = true
-		},
-		'1.0.0': (state) => {
-			delete state.debugPhase
-			state.phase = '1.0.0'
-		},
-		'1.0.2': (state) => {
-			state.phase = '1.0.2'
-		},
-		'>=2.0.0': (state) => {
-			state.phase = '>=2.0.0'
-		}
-	}
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+import PersistedState from 'vuex-electron-store'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+	// ...
+	plugins: [
+		PersistedState.create({
+			migrations: {
+				'0.1.0': (state) => {
+					state.debugPhase = true
+				},
+				'1.0.0': (state) => {
+					delete state.debugPhase
+					state.phase = '1.0.0'
+				},
+				'1.0.2': (state) => {
+					state.phase = '1.0.2'
+				},
+				'>=2.0.0': (state) => {
+					state.phase = '>=2.0.0'
+				}
+			}
+		})
+	],
+	// ...
 })
 ```
 

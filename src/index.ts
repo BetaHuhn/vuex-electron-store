@@ -21,7 +21,8 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 			reducer: reducer,
 			arrayMerger: combineMerge,
 			overwrite: false,
-			checkStorage: true
+			checkStorage: true,
+			dev: false
 		}
 
 		this.opts = Object.assign({}, defaultOptions, inputOpts)
@@ -29,7 +30,7 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 
 		// Generate electron-store migrations from migrate state functions
 		const migrations: Migrations<State> = {}
-		if (inputOpts.migrations) {
+		if (inputOpts.migrations && !this.opts.dev) {
 			Object.entries(inputOpts.migrations).forEach(([version, migrate]) => {
 
 				migrations[version] = (store: Conf<State>) => {
@@ -124,8 +125,10 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 				persistedState.checkStorage()
 			}
 
-			persistedState.loadInitialState()
-			persistedState.subscribeOnChanges()
+			if (!persistedState.opts.dev) {
+				persistedState.loadInitialState()
+				persistedState.subscribeOnChanges()
+			}
 		}
 	}
 

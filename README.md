@@ -75,6 +75,7 @@ Here are all the options [vuex-electron-store](https://github.com/BetaHuhn/vuex-
 | `overwrite` | `boolean` | When rehydrating, whether to overwrite the existing state with the persisted state directly, instead of merging the two objects with [`deepmerge`](https://github.com/TehShrike/deepmerge) | `false` |
 | `storageKey` | `string` | Name of the key used for the stored state object | `state` |
 | `checkStorage` | `boolean` | Check during the plugin's initialization if storage is available. A Write-Read-Delete operation will be performed | `true` |
+| `dev` | `boolean` | Enable development mode. During development it might be useful to disable persisting and rehydrating the state | `false` |
 | `reducer` | `function` | Will be called with the state and the paths as parameters to reduce the state to persist based on the given paths. Output will be persisted | Defaults to include the specified paths |
 | `arrayMerger` | `function` | A function for merging arrays when rehydrating state. Will be passed as the [arrayMerge](https://github.com/TehShrike/deepmerge#arraymerge) argument to `deepmerge` | Defaults to combine the existing state with the persisted state |
 | `encryptionKey` | `string/Buffer/TypedArray/DataView` | Will be used to encrypt the storage file. Only secure if you don't store the key in plain text ([more info](https://github.com/sindresorhus/electron-store#encryptionkey)) | n/a |

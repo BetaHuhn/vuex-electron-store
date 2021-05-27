@@ -65,6 +65,16 @@ export interface Options<T> extends Pick<StoreOptions<T>, 'encryptionKey'> {
 	*/
 	checkStorage?: boolean;
 
+	/**
+	 * Enable development mode.
+	 * 
+	 * During development it might be useful to disable persisting and rehydrating the state.
+	 * 
+	 * All changes to the state will not be persisted, regardless of the paths provided and rehydration of the state will be skipped.
+	 * Migrations will also not be performed.
+	 * @default false
+	*/
+	dev?: boolean;
 
 	/**
 	 * Migration operations to perform to the persisted state whenever a version is upgraded.
@@ -118,7 +128,7 @@ interface MergeOptions extends SetRequired<DeepmergeOptions, 'isMergeableObject'
 	cloneUnlessOtherwiseSpecified(value: Record<string, unknown>, options?: MergeOptions): any;
 }
 
-export type FinalOptions<T> = SetRequired<Options<T>, 'fileName' | 'storageKey' | 'reducer' | 'arrayMerger' | 'overwrite' | 'checkStorage' | 'storage'>
+export type FinalOptions<T> = SetRequired<Options<T>, 'fileName' | 'storageKey' | 'reducer' | 'arrayMerger' | 'overwrite' | 'checkStorage' | 'dev' | 'storage'>
 export type Reducer<State> = (state: State, paths: string[] | undefined) => any
 export type Filter = (mutation: MutationPayload) => boolean
 export type ArrayMerger = (target: any[], source: any[], options: MergeOptions) => any[]

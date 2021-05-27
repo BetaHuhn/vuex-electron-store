@@ -1,3 +1,11 @@
+## [v1.1.1] - 2021-05-27
+
+[Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.1.1) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.1.0...v1.1.1) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.1.1) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.1.1.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.1.1.tar.gz))
+
+### Bug fixes
+
+- [`62dfd5e`](https://github.com/BetaHuhn/vuex-electron-store/commit/62dfd5e)  Fix types not being included in build
+
 ## [v1.1.0] - 2021-05-27
 
 [Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.1.0) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.0.1...v1.1.0) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.1.0) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.1.0.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.1.0.tar.gz))

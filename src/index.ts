@@ -89,6 +89,8 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 
 	subscribeOnChanges(): void {
 		this.store.subscribe((mutation: MutationPayload, state: any) => {
+			if (this.opts.resetMutation && mutation.type === this.opts.resetMutation) return this.setState({})
+
 			if (this.opts.filter && this.opts.filter(mutation)) return
 
 			this.setState(this.opts.reducer(state, this.opts.paths))

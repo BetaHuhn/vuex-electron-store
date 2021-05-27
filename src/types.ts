@@ -77,6 +77,25 @@ export interface Options<T> extends Pick<StoreOptions<T>, 'encryptionKey'> {
 	dev?: boolean;
 
 	/**
+	 * Name of a mutation which when called will reset the persisted state.
+	 * 
+	 * The entire persisted state will be deleted
+	 * Requires a mutation with the same name.
+	 * @example
+		```
+		mutations: {
+			ELECTRON_STORE_RESET(state) {}
+		},
+		plugins: [
+			PersistedState.create({
+				resetMutation: 'ELECTRON_STORE_RESET'
+			})
+		],
+		```
+	*/
+	resetMutation?: string;
+
+	/**
 	 * Migration operations to perform to the persisted state whenever a version is upgraded.
 	 * 
 	 * The `migrations` object should consist of a key-value pair of `'version': handler`.

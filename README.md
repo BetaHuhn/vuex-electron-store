@@ -78,6 +78,7 @@ Here are all the options [vuex-electron-store](https://github.com/BetaHuhn/vuex-
 | `dev` | `boolean` | Enable development mode. During development it might be useful to disable persisting and rehydrating the state | `false` |
 | `reducer` | `function` | Will be called with the state and the paths as parameters to reduce the state to persist based on the given paths. Output will be persisted | Defaults to include the specified paths |
 | `arrayMerger` | `function` | A function for merging arrays when rehydrating state. Will be passed as the [arrayMerge](https://github.com/TehShrike/deepmerge#arraymerge) argument to `deepmerge` | Defaults to combine the existing state with the persisted state |
+| `resetMutation` | `string` | Name of a mutation which when called will reset the persisted state. The entire persisted state will be deleted. Requires a mutation with the same name | n/a |
 | `encryptionKey` | `string/Buffer/TypedArray/DataView` | Will be used to encrypt the storage file. Only secure if you don't store the key in plain text ([more info](https://github.com/sindresorhus/electron-store#encryptionkey)) | n/a |
 | `storageFileLocation` | `string` | Location where the storage file should be stored. If a relative path is provided, it will be relative to the default cwd. Don't specify this unless absolutely necessary ([more info](https://github.com/sindresorhus/electron-store#cwd)) | Defaults to optimal location based on system conventions |
 | `migrations` | `object` | Migration operations to perform to the persisted data whenever a version is upgraded. The migrations object should consist of a key-value pair of `'version': handler` | n/a |
@@ -248,6 +249,41 @@ export default new Vuex.Store({
 
 ---
 
+### Reset Mutation
+
+You can reset the persisted state by specifying a mutation as the `resetMutation` option and then calling it:
+
+```js
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+import PersistedState from 'vuex-electron-store'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+	// ...
+	mutations: {
+		ELECTRON_STORE_RESET(state) {
+			// Optionally do something else here
+		}
+	},
+	plugins: [
+		PersistedState.create({
+			resetMutation: 'ELECTRON_STORE_RESET'
+		})
+	],
+	// ...
+})
+
+// Later in a component or somewhere else
+this.$store.commit('ELECTRON_STORE_RESET')
+```
+
+> Note: You have to create a mutation by the same name, even if it doesn't do anything.
+
+---
+
 ### Migration between versions
 
 You can use migrations to perform operations on the persisted data whenever a version is upgraded. The migrations object should consist of a key-value pair of `'version': handler`. In the handler you can manipulate the state like any other JavaScript object:
@@ -278,10 +314,7 @@ PersistedState.create({
 
 ## 📝 Todo
 
-- [ ] Resetting the persisted state programmatically
 - [ ] Create modified version for Vue 3
-
-Feel free to create a PR if you need one of the mentioned features!
 
 ## 💻 Development
 

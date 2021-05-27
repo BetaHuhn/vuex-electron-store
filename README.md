@@ -68,8 +68,8 @@ PersistedState.create({
 	paths: [ 'auth.user' ]
 })
 ```
-
-Here are all the options [vuex-electron-store](https://github.com/BetaHuhn/vuex-electron-store) supports:
+<details><summary>Here are all the options <a href="https://github.com/BetaHuhn/vuex-electron-store">vuex-electron-store</a> supports:</summary>
+<br>
 
 | Name | Type | Description | Default |
 | ------------- | ------------- | ------------- | ------------- |
@@ -86,6 +86,8 @@ Here are all the options [vuex-electron-store](https://github.com/BetaHuhn/vuex-
 | `encryptionKey` | `string/Buffer/TypedArray/DataView` | Encryption key used to encrypt the storage file | n/a |
 | `storageFileLocation` | `string` | Location where the storage file should be stored | [config directory](https://github.com/sindresorhus/env-paths#pathsconfig) |
 | `migrations` | `object` | Migration operations to perform to the persisted state whenever a version is upgraded | n/a |
+	
+</details>
 
 ## 🛠️ Configuration
 

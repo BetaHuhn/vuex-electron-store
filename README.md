@@ -43,7 +43,15 @@ export default new Vuex.Store({
 })
 ```
 
-> You can use this module directly in both the main and renderer process. For use in the renderer process only, you need to call PersistedState.initRenderer() in the main process as well. More info [here](https://github.com/sindresorhus/electron-store#initrenderer)
+And then initialize it in the Electron main process:
+
+```js
+import PersistedState from 'vuex-electron-store'
+
+PersistedState.initRenderer()
+```
+
+> This is needed to setup the required `ipc` communication for the [electron-store](https://github.com/sindresorhus/electron-store) module ([more info](https://github.com/sindresorhus/electron-store#initrenderer))
 
 You can also pass an options object to `.create()` to customize the behaviour of [vuex-electron-store](https://github.com/BetaHuhn/vuex-electron-store) further:
 

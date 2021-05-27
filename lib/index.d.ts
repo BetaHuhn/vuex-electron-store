@@ -36,7 +36,8 @@ declare class PersistedState<State extends Record<string, any> = Record<string, 
     */
     static create<State>(options?: Options<State>): Plugin<State>;
     /**
-    * Initializer to set up the required `ipc` communication channels for the module when a `PersistedState` instance is not created in the main process and you are creating a `PersistedState` instance in the Electron renderer process only.
+     * Initializer to set up the required `ipc` communication channels for the [electron-store](https://github.com/sindresorhus/electron-store) module.
+     * Needs to be called in the Electron main process.
     */
     static initRenderer(): void;
 }

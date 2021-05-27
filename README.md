@@ -4,15 +4,19 @@
 
 [![Node CI](https://github.com/BetaHuhn/vuex-electron-store/workflows/Node%20CI/badge.svg)](https://github.com/BetaHuhn/vuex-electron-store/actions?query=workflow%3A%22Node+CI%22) [![Release CI](https://github.com/BetaHuhn/vuex-electron-store/workflows/Release%20CI/badge.svg)](https://github.com/BetaHuhn/vuex-electron-store/actions?query=workflow%3A%22Release+CI%22) [![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/BetaHuhn/vuex-electron-store/blob/master/LICENSE) ![David](https://img.shields.io/david/betahuhn/vuex-electron-store)
 
-Persist and rehydrate your Vuex state in your Electron app.
+Persist and rehydrate the Vuex state in your Electron app.
 
 </div>
 
-## 👋 Introduction
+## Features
 
-[Vuex Electron Store](https://github.com/BetaHuhn/vuex-electron-store) integrates perfectly with Vuex and Electron and persistently stores your state between app restarts. You can customize which [specific state](#only-partially-persist-state) you want to persist and even [filter the mutations](#filter-mutations) which are allowed to persist their state. The data is saved in a JSON file stored the users [appData directory](https://www.electronjs.org/docs/api/app#appgetpathname) and can be [migrated between versions](#migration-between-versions).
+- 💾 **Persistent state** - *persistently stores the Vuex state in your Electron app*
+- 🔌 **Easy integration** - *integrates perfectly with Vue and Electron as a [Vuex Plugin](https://vuex.vuejs.org/guide/plugins.html)*
+- 🔨 **Customization** - *specify what [parts of your Vuex state](#only-partially-persist-state) you want to persist and [which mutations are allowed](#filter-mutations)*
+- ♻️ **Migration between versions** - *the persisted state can be easily [migrated](#migration-between-versions) between different versions of your Electron app*
+- 🔐 **Encryption** - *you can optionally [encrypt](#%EF%B8%8F-options) the storage file with a encryption key*
 
-This library is basically a wrapper around [electron-store](https://github.com/sindresorhus/electron-store) to make it work directly with Vuex and supports most of it's features like [encryption](#%EF%B8%8F-options) and [migrations](#migration-between-versions).
+This library is a wrapper around [electron-store](https://github.com/sindresorhus/electron-store) to make it work directly with Vuex and offer additional features.
 
 ## 🚀 Get started
 
@@ -43,7 +47,7 @@ export default new Vuex.Store({
 })
 ```
 
-And then initialize it in the Electron main process:
+And then initialize it in the [Electron main process](https://www.electronjs.org/docs/tutorial/quick-start#run-the-main-process):
 
 ```js
 import PersistedState from 'vuex-electron-store'
@@ -51,7 +55,11 @@ import PersistedState from 'vuex-electron-store'
 PersistedState.initRenderer()
 ```
 
-> This is needed to setup the required `ipc` communication for the [electron-store](https://github.com/sindresorhus/electron-store) module ([more info](https://github.com/sindresorhus/electron-store#initrenderer))
+> Since Vuex only runs in the renderer, this is needed to setup the required `ipc` communication ([more info](https://github.com/sindresorhus/electron-store#initrenderer))
+
+And you are done! Your Electron app now has a persistent Vuex state! 🎉
+
+## ⚙️ Options
 
 You can also pass an options object to `.create()` to customize the behaviour of [vuex-electron-store](https://github.com/BetaHuhn/vuex-electron-store) further:
 
@@ -61,29 +69,73 @@ PersistedState.create({
 })
 ```
 
-See all available options [below](#%EF%B8%8F-options).
-
-## ⚙️ Options
-
 Here are all the options [vuex-electron-store](https://github.com/BetaHuhn/vuex-electron-store) supports:
 
 | Name | Type | Description | Default |
 | ------------- | ------------- | ------------- | ------------- |
 | `fileName` | `string` | Name of the storage file (without extension) | `vuex` |
-| `paths` | `array` | An array of any paths to partially persist the state. If no paths are given, the complete state is persisted. If an empty array is given, no state is persisted. Paths must be specified using dot notation e.g. `user.name` | n/a |
-| `filter` | `function` | Will be called on each mutation that triggers `setState` and can be used to filter which mutations can persist their state | n/a |
-| `overwrite` | `boolean` | When rehydrating, whether to overwrite the existing state with the persisted state directly, instead of merging the two objects with [`deepmerge`](https://github.com/TehShrike/deepmerge) | `false` |
+| `paths` | `array` | An array of any paths to partially persist the state | n/a |
+| `filter` | `function` | A function which will be called on each mutation that triggers `setState` | n/a |
+| `overwrite` | `boolean` | Overwrite the existing state with the persisted state directly when rehydrating | `false` |
 | `storageKey` | `string` | Name of the key used for the stored state object | `state` |
-| `checkStorage` | `boolean` | Check during the plugin's initialization if storage is available. A Write-Read-Delete operation will be performed | `true` |
-| `dev` | `boolean` | Enable development mode. During development it might be useful to disable persisting and rehydrating the state | `false` |
-| `reducer` | `function` | Will be called with the state and the paths as parameters to reduce the state to persist based on the given paths. Output will be persisted | Defaults to include the specified paths |
-| `arrayMerger` | `function` | A function for merging arrays when rehydrating state. Will be passed as the [arrayMerge](https://github.com/TehShrike/deepmerge#arraymerge) argument to `deepmerge` | Defaults to combine the existing state with the persisted state |
-| `resetMutation` | `string` | Name of a mutation which when called will reset the persisted state. The entire persisted state will be deleted. Requires a mutation with the same name | n/a |
-| `encryptionKey` | `string/Buffer/TypedArray/DataView` | Will be used to encrypt the storage file. Only secure if you don't store the key in plain text ([more info](https://github.com/sindresorhus/electron-store#encryptionkey)) | n/a |
-| `storageFileLocation` | `string` | Location where the storage file should be stored. If a relative path is provided, it will be relative to the default cwd. Don't specify this unless absolutely necessary ([more info](https://github.com/sindresorhus/electron-store#cwd)) | Defaults to optimal location based on system conventions |
-| `migrations` | `object` | Migration operations to perform to the persisted data whenever a version is upgraded. The migrations object should consist of a key-value pair of `'version': handler` | n/a |
+| `checkStorage` | `boolean` | Check if the storage file is available and can be accessed | `true` |
+| `dev` | `boolean` | Enable development mode | `false` |
+| `reducer` | `function` | A function to reduce the state to persist based on the given paths | n/a |
+| `arrayMerger` | `function` | A function for merging arrays when rehydrating state | combine arrays |
+| `resetMutation` | `string` | Name of a mutation which when called will reset the persisted state | n/a |
+| `encryptionKey` | `string/Buffer/TypedArray/DataView` | Encryption key used to encrypt the storage file | n/a |
+| `storageFileLocation` | `string` | Location where the storage file should be stored | [config directory](https://github.com/sindresorhus/env-paths#pathsconfig) |
+| `migrations` | `object` | Migration operations to perform to the persisted state whenever a version is upgraded | n/a |
 
-See below for some [examples](#-examples).
+## 🛠️ Configuration
+
+Here are some of the more important options in a more detailed form.
+
+### Paths
+
+You can specify different paths (i.e. parts) of you state with the `paths` option. It accepts an array of paths specified using dot notation e.g. `user.name`.
+
+If no paths are given, the complete state is persisted. If an empty array is given, no state is persisted.
+
+[See Example](#only-partially-persist-state)
+
+### Filter
+
+You can limit the mutations which can persist state with the `filter` function. The specified function will be called on each mutation that triggers `setState`.
+
+[See Example](#filter-mutations)
+
+### Overwrite
+
+By default the the existing state will be merged using [deepmerge](https://github.com/TehShrike/deepmerge) with the persisted state. If you set `overwrite` to true, the persisted state will overwrite the existing state directly when rehydrating.
+
+[See Example](#overwriting-the-existing-state)
+
+### Development Mode
+
+During development it might be useful to disable persisting and rehydrating the state. You can disable this with the `dev` option. When it is set to true, all changes to the state will not be persisted (regardless of the paths provided), rehydration of the state will be skipped and migrations will not be performed.
+
+[See Example](#during-development)
+
+### Migrations
+
+You can specify operations to perform to the persisted state whenever a version is upgraded. The `migrations` object should consist of a key-value pair of `'version': handler` (the `version` can also be a [semver range](https://github.com/npm/node-semver#ranges)). In the handler you can manipulate the previously persisted state (just like any other JavaScript object) before it is rehydrated.
+
+[See Example](#migration-between-versions)
+
+### Reset Mutation
+
+You can programmatically reset the persisted state by specifying the name of a mutation as the `resetMutation` option. Once you call that mutation, the entire persisted state will be deleted. You have to create a mutation by the same name, even if it doesn't do anything.
+
+[See Example](#reset-mutation)
+
+### Encryption
+
+You can optionally specify an encryption key which will be used to encrypt the storage file using the aes-256-cbc encryption algorithm. This is only secure if you don't store the key in plain text, but in a secure manner in the Node.js app. You could use [node-keytar](https://github.com/atom/node-keytar) to store the encryption key securely, or deriving the key from a password entered by the user.
+
+It might also be useful for obscurity. If a user looks through the config directory and finds the config file, since it's just a JSON file, they may be tempted to modify it. By providing an encryption key, the file will be obfuscated, which should hopefully deter any users from doing so.
+
+[See Example](#encrypting-the-storage-file)
 
 ## 📖 Examples
 
@@ -249,6 +301,31 @@ export default new Vuex.Store({
 
 ---
 
+### During development
+
+Setting `dev` to true will stop [vuex-electron-store](https://github.com/BetaHuhn/vuex-electron-store) from persisting and rehydrating the state.
+
+```js
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+import PersistedState from 'vuex-electron-store'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+	// ...
+	plugins: [
+		PersistedState.create({
+			dev: true
+		})
+	],
+	// ...
+})
+```
+
+---
+
 ### Reset Mutation
 
 You can reset the persisted state by specifying a mutation as the `resetMutation` option and then calling it:
@@ -280,7 +357,34 @@ export default new Vuex.Store({
 this.$store.commit('ELECTRON_STORE_RESET')
 ```
 
-> Note: You have to create a mutation by the same name, even if it doesn't do anything.
+You have to create a mutation by the same name, even if it doesn't do anything.
+
+---
+
+### Encrypting the storage file
+
+You can optionally encrypt/obfuscate the storage file by specifying an encryption key:
+
+```js
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+import PersistedState from 'vuex-electron-store'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+	// ...
+	plugins: [
+		PersistedState.create({
+			encryptionKey: 'superSecretKey'
+		})
+	],
+	// ...
+})
+```
+
+Don't store the key like this if security is of concern, the encryption key would be easily found in the Electron app.
 
 ---
 
@@ -308,13 +412,7 @@ PersistedState.create({
 })
 ```
 
-> The `state` parameter contains the persisted state before rehydration.
-
----
-
-## 📝 Todo
-
-- [ ] Create modified version for Vue 3
+The `state` parameter contains the persisted state before rehydration.
 
 ## 💻 Development
 
@@ -323,6 +421,10 @@ Issues and PRs are very welcome!
 - run `yarn lint` or `npm run lint` to run eslint.
 - run `yarn watch` or `npm run watch` to watch for changes.
 - run `yarn build` or `npm run build` to produce a compiled version in the `lib` folder.
+
+### Todo
+
+- Add support for Vue 3
 
 ## ❔ About
 

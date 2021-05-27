@@ -1,10 +1,9 @@
-/* eslint-disable no-unused-vars */
-import Store , { Options as StoreOptions } from 'electron-store'
+import Store, { Options as StoreOptions } from 'electron-store'
 import { MutationPayload } from 'vuex'
 import { SetRequired } from 'type-fest'
 import { Options as DeepmergeOptions } from 'deepmerge'
 
-export interface Options<T> extends Pick<StoreOptions<T>, 'migrations' | 'encryptionKey'> {
+export interface Options<T> extends Pick<StoreOptions<T>, 'encryptionKey'> {
 	/**
 	 * Name of the storage file (without extension).
 	 * 
@@ -41,7 +40,7 @@ export interface Options<T> extends Pick<StoreOptions<T>, 'migrations' | 'encryp
 	 * 
 	 * Defaults to include all of the specified paths
 	*/
-	reducer?: Reducer;
+	reducer?: Reducer<T>;
 
 	/**
 	 * A function for merging arrays when rehydrating state. 
@@ -65,6 +64,35 @@ export interface Options<T> extends Pick<StoreOptions<T>, 'migrations' | 'encryp
 	 * @default true
 	*/
 	checkStorage?: boolean;
+
+
+	/**
+	 * Migration operations to perform to the persisted state whenever a version is upgraded.
+	 * 
+	 * The `migrations` object should consist of a key-value pair of `'version': handler`.
+	 * The `version` can also be a [semver range](https://github.com/npm/node-semver#ranges).
+	 * @example
+		```
+		PersistedState.create({
+			migrations: {
+				'0.1.0': (state) => {
+					state.debugPhase = true
+				},
+				'1.0.0': (state) => {
+					delete state.debugPhase
+					state.phase = '1.0.0'
+				},
+				'1.0.2': (state) => {
+					state.phase = '1.0.2'
+				},
+				'>=2.0.0': (state) => {
+					state.phase = '>=2.0.0'
+				}
+			}
+		})
+		```
+	*/
+	migrations?:  Record<string, (state: T) => void>;
 
 	/**
 	 * Location where the storage file should be stored. 
@@ -91,7 +119,7 @@ interface MergeOptions extends SetRequired<DeepmergeOptions, 'isMergeableObject'
 }
 
 export type FinalOptions<T> = SetRequired<Options<T>, 'fileName' | 'storageKey' | 'reducer' | 'arrayMerger' | 'overwrite' | 'checkStorage' | 'storage'>
-export type State = Record<string, unknown>
-export type Reducer = (state: State, paths: string[] | undefined) => State
+export type Reducer<State> = (state: State, paths: string[] | undefined) => any
 export type Filter = (mutation: MutationPayload) => boolean
 export type ArrayMerger = (target: any[], source: any[], options: MergeOptions) => any[]
+export type Migrations<State> = StoreOptions<State>['migrations'];

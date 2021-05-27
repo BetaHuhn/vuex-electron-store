@@ -4,7 +4,7 @@ import { Options, FinalOptions } from './types';
 * Persist and rehydrate your [Vuex](https://vuex.vuejs.org/) state in your [Electron](https://electronjs.org) app
 */
 declare class PersistedState<State extends Record<string, any> = Record<string, unknown>> {
-    opts: FinalOptions<any>;
+    opts: FinalOptions<State>;
     store: VuexStore<any>;
     constructor(inputOpts: Options<State>, store: VuexStore<State>);
     getState(): any;

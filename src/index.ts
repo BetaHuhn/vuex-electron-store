@@ -1,16 +1,17 @@
 import merge from 'deepmerge'
 import Store from 'electron-store'
+import Conf from 'conf'
 import { Store as VuexStore, MutationPayload, Plugin } from 'vuex'
 
 import { reducer, combineMerge } from './helpers'
-import { Options, FinalOptions } from './types'
+import { Options, FinalOptions, Migrations } from './types'
 
 /**
 * Persist and rehydrate your [Vuex](https://vuex.vuejs.org/) state in your [Electron](https://electronjs.org) app
 */
 class PersistedState<State extends Record<string, any> = Record<string, unknown>> {
 
-	opts: FinalOptions<any>
+	opts: FinalOptions<State>
 	store: VuexStore<any>
 
 	constructor(inputOpts: Options<State>, store: VuexStore<State>) {
@@ -23,17 +24,33 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 			checkStorage: true
 		}
 
-		if (!inputOpts.storage) {
-			defaultOptions.storage = new Store({
-				name: defaultOptions.fileName,
-				...(inputOpts.encryptionKey && { encryptionKey: inputOpts.encryptionKey }),
-				...(inputOpts.storageFileLocation && { cwd: inputOpts.storageFileLocation }),
-				...(inputOpts.migrations && { migrations: inputOpts.migrations })
+		this.opts = Object.assign({}, defaultOptions, inputOpts)
+		this.store = store
+
+		// Generate electron-store migrations from migrate state functions
+		const migrations: Migrations<State> = {}
+		if (inputOpts.migrations) {
+			Object.entries(inputOpts.migrations).forEach(([version, migrate]) => {
+
+				migrations[version] = (store: Conf<State>) => {
+					const state = store.get(this.opts.storageKey)
+
+					migrate(state)
+
+					store.set(this.opts.storageKey, state)
+				}
 			})
 		}
 
-		this.opts = Object.assign({}, defaultOptions, inputOpts)
-		this.store = store
+		// Create new electron-store instance
+		if (!inputOpts.storage) {
+			this.opts.storage = new Store({
+				name: this.opts.fileName,
+				encryptionKey: this.opts.encryptionKey,
+				cwd: this.opts.storageFileLocation,
+				migrations
+			})
+		}
 	}
 
 	getState(): any {

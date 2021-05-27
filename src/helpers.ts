@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import dotProp from 'dot-prop'
 import merge from 'deepmerge'
 
@@ -20,7 +19,8 @@ export const combineMerge: ArrayMerger = (target, source, options) => {
 	return destination
 }
 
-export const reducer: Reducer = (state, paths) => {
+// TODO: Get Reducer<State> to work
+export const reducer: Reducer<any> = (state, paths) => {
 	if (Array.isArray(paths)) {
 		return paths.reduce((substate, path) => {
 			return dotProp.set(substate, path, dotProp.get(state, path))

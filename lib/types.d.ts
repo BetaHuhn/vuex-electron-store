@@ -2,7 +2,7 @@ import Store, { Options as StoreOptions } from 'electron-store';
 import { MutationPayload } from 'vuex';
 import { SetRequired } from 'type-fest';
 import { Options as DeepmergeOptions } from 'deepmerge';
-export interface Options<T> extends Pick<StoreOptions<T>, 'encryptionKey'> {
+export interface Options<T> extends Pick<StoreOptions<T>, 'migrations' | 'encryptionKey'> {
     fileName?: StoreOptions<T>['name'];
     storageKey?: string;
     paths?: string[];

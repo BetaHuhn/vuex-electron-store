@@ -24,7 +24,8 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 			defaultOptions.storage = new Store({
 				name: defaultOptions.fileName,
 				...(opts.encryptionKey && { encryptionKey: opts.encryptionKey }),
-				...(opts.storageFileLocation && { cwd: opts.storageFileLocation })
+				...(opts.storageFileLocation && { cwd: opts.storageFileLocation }),
+				...(opts.migrations && { migrations: opts.migrations })
 			})
 		}
 

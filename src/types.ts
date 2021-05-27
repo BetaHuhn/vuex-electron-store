@@ -59,8 +59,9 @@ export interface Options<T> extends Pick<StoreOptions<T>, 'encryptionKey'> {
 	overwrite?: boolean;
 
 	/**
-	 * Check if the [electron-store](https://github.com/sindresorhus/electron-store) is available.
-	 * Will run during the plugin's initialization and perform a Write-Read-Delete operation
+	 * Check if the storage file is available and can be accessed
+	 * 
+	 * Will run during the plugin's initialization and perform a Write-Read-Delete operation on the [electron-store](https://github.com/sindresorhus/electron-store)
 	 * @default true
 	*/
 	checkStorage?: boolean;

@@ -1,3 +1,14 @@
+## [v1.2.1] - 2021-06-07
+
+[Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.2.1) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.2.0...v1.2.1) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.2.1) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.2.1.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.2.1.tar.gz))
+
+### Dependency updates
+
+- [`0850e56`](https://github.com/BetaHuhn/vuex-electron-store/commit/0850e56)  Bump vue from 2.6.12 to 2.6.13
+- [`1f49af7`](https://github.com/BetaHuhn/vuex-electron-store/commit/1f49af7)  Bump type-fest from 1.1.3 to 1.2.0
+- [`d36c564`](https://github.com/BetaHuhn/vuex-electron-store/commit/d36c564)  Bump @types/node from 15.6.1 to 15.9.0
+- [`a7cd078`](https://github.com/BetaHuhn/vuex-electron-store/commit/a7cd078)  Bump @types/node from 15.9.0 to 15.12.0
+
 ## [v1.2.0] - 2021-05-27
 
 [Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.2.0) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.1.1...v1.2.0) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.2.0) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.2.0.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.2.0.tar.gz))

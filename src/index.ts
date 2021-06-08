@@ -3,10 +3,10 @@ import Store from 'electron-store'
 import Conf from 'conf'
 import { ipcMain, ipcRenderer } from 'electron-better-ipc'
 import { BrowserWindow } from 'electron'
-import { Store as VuexStore, MutationPayload, Plugin } from 'vuex'
+import { Store as VuexStore, MutationPayload, Plugin, CommitOptions, DispatchOptions } from 'vuex'
 
 import { reducer, combineMerge, ipcEvents } from './helpers'
-import { Options, FinalOptions, Migrations } from './types'
+import { Options, FinalOptions, Migrations, StoreInterface } from './types'
 
 /**
 * Persist and rehydrate your [Vuex](https://vuex.vuejs.org/) state in your [Electron](https://electronjs.org) app
@@ -103,12 +103,12 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 	initIpcConnectionToMain(): void {
 		ipcRenderer.send(ipcEvents.CONNECT)
 
-		ipcRenderer.on(ipcEvents.COMMIT, (_event, { type, payload }) => {
-			this.store.commit(type, payload)
+		ipcRenderer.on(ipcEvents.COMMIT, (_event, { type, payload, options }) => {
+			this.store.commit(type, payload, options)
 		})
 
-		ipcRenderer.on(ipcEvents.DISPATCH, (_event, { type, payload }) => {
-			this.store.dispatch(type, payload)
+		ipcRenderer.on(ipcEvents.DISPATCH, (_event, { type, payload, options }) => {
+			this.store.dispatch(type, payload, options)
 		})
 
 		ipcRenderer.answerMain(ipcEvents.GET_STATE, () => {			
@@ -131,20 +131,20 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 		const store = PersistedState.getStoreFromRenderer()
 
 		// Commit a mutation
-		store.commit(type, payload)
+		store.commit(type, payload, options)
 
 		// Dispatch an action
-		store.dispatch(action, payload)
+		store.dispatch(type, payload, options)
 
 		// Get the current Vuex State
 		const state = await store.getState()
 		```
 	*/
-	static getStoreFromRenderer(): any {
+	static getStoreFromRenderer(): StoreInterface {
 		if (process.type === 'renderer') throw new Error('[Vuex Electron] Only call `.getStoreFromRenderer()` in the main process.')
 
 		// Init electron-store
-		this.initRenderer()
+		PersistedState.initRenderer()
 
 		let connection: Electron.WebContents | undefined
 
@@ -159,19 +159,19 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 			})
 		})
 
-		const commit = (type: any, payload: any) => {
+		const commit: StoreInterface['commit'] = (type: string, payload?: any, options?: CommitOptions) => {
 			if (!connection) throw new Error('[Vuex Electron] Not connected to renderer.')
 
-			connection.send(ipcEvents.COMMIT, { type, payload })
+			connection.send(ipcEvents.COMMIT, { type, payload, options })
 		}
 
-		const dispatch = (type: any, payload: any) => {
+		const dispatch: StoreInterface['dispatch'] = (type: string, payload?: any, options?: DispatchOptions) => {
 			if (!connection) throw new Error('[Vuex Electron] Not connected to renderer.')
 
-			connection.send(ipcEvents.DISPATCH, { type, payload })
+			connection.send(ipcEvents.DISPATCH, { type, payload, options })
 		}
 
-		const getState = () => {
+		const getState: StoreInterface['getState'] = () => {
 			if (!connection) throw new Error('[Vuex Electron] Not connected to renderer.')
 
 			const win = BrowserWindow.fromWebContents(connection)

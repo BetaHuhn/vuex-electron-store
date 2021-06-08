@@ -1,5 +1,5 @@
 import { Store as VuexStore, Plugin } from 'vuex';
-import { Options, FinalOptions } from './types';
+import { Options, FinalOptions, StoreInterface } from './types';
 /**
 * Persist and rehydrate your [Vuex](https://vuex.vuejs.org/) state in your [Electron](https://electronjs.org) app
 */
@@ -28,16 +28,16 @@ declare class PersistedState<State extends Record<string, any> = Record<string, 
         const store = PersistedState.getStoreFromRenderer()
 
         // Commit a mutation
-        store.commit(type, payload)
+        store.commit(type, payload, options)
 
         // Dispatch an action
-        store.dispatch(action, payload)
+        store.dispatch(type, payload, options)
 
         // Get the current Vuex State
         const state = await store.getState()
         ```
     */
-    static getStoreFromRenderer(): any;
+    static getStoreFromRenderer(): StoreInterface;
     /**
      * Create a new Vuex plugin which initializes the [electron-store](https://github.com/sindresorhus/electron-store), rehydrates the state and persistently stores any changes
      * @param {Options} Options - Configuration options

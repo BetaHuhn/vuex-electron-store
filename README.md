@@ -275,10 +275,10 @@ import PersistedState from 'vuex-electron-store'
 const store = PersistedState.getStoreFromRenderer()
 
 // Commit a mutation
-store.commit(type, payload)
+store.commit(type, payload, options)
 
 // Dispatch an action
-store.dispatch(action, payload)
+store.dispatch(type, payload, options)
 
 // Get the current Vuex State
 const state = await store.getState()
@@ -596,10 +596,10 @@ import PersistedState from 'vuex-electron-store'
 const store = PersistedState.getStoreFromRenderer()
 
 // Commit a mutation
-store.commit(type, payload)
+store.commit(type, payload, options)
 
 // Dispatch an action
-store.dispatch(action, payload)
+store.dispatch(type, payload, options)
 
 // Get the current Vuex State
 const state = await store.getState()

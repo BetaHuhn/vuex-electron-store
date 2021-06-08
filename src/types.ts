@@ -1,5 +1,5 @@
 import Store, { Options as StoreOptions } from 'electron-store'
-import { MutationPayload } from 'vuex'
+import { MutationPayload, CommitOptions,  DispatchOptions } from 'vuex'
 import { SetRequired } from 'type-fest'
 import { Options as DeepmergeOptions } from 'deepmerge'
 
@@ -151,6 +151,23 @@ export interface Options<T> extends Pick<StoreOptions<T>, 'encryptionKey'> {
 	 */
 	ipc?: boolean;
 }
+
+export interface StoreInterface {
+	/**
+	 * Commit a Mutation in the renderer's Vuex Store
+	 */
+	commit: (type: string, payload?: any, options?: CommitOptions) => void;
+
+	/**
+	 * Dispatch an Action in the renderer's Vuex Store
+	 */
+	dispatch: (type: string, payload?: any, options?: DispatchOptions) => void;
+
+	/**
+	 * Get the current state from the renderer's Vuex Store
+	 */
+	getState: () => any;
+} 
 
 // Fix deepmerge types. Reference: https://git.io/JGtuC
 interface MergeOptions extends SetRequired<DeepmergeOptions, 'isMergeableObject'> {

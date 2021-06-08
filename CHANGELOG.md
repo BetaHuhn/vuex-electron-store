@@ -1,3 +1,11 @@
+## [v1.3.1] - 2021-06-08
+
+[Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.3.1) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.3.0...v1.3.1) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.3.1) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.3.1.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.3.1.tar.gz))
+
+### Bug fixes
+
+- [`e646a35`](https://github.com/BetaHuhn/vuex-electron-store/commit/e646a35)  Add options parameter to commit and dispatch
+
 ## [v1.3.0] - 2021-06-08
 
 [Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.3.0) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.2.1...v1.3.0) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.3.0) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.3.0.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.3.0.tar.gz))

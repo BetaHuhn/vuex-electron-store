@@ -1,3 +1,21 @@
+## [v1.3.0] - 2021-06-08
+
+[Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.3.0) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.2.1...v1.3.0) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.3.0) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.3.0.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.3.0.tar.gz))
+
+### New features
+
+- [`ac91718`](https://github.com/BetaHuhn/vuex-electron-store/commit/ac91718)  Add ipc mode to access store from main process (#15)
+(Issues: [`#15`](https://github.com/BetaHuhn/vuex-electron-store/issues/15))
+
+### Dependency updates
+
+- [`35839f0`](https://github.com/BetaHuhn/vuex-electron-store/commit/35839f0)  Bump eslint from 7.27.0 to 7.28.0
+- [`efc79b4`](https://github.com/BetaHuhn/vuex-electron-store/commit/efc79b4)  Bump @types/node from 15.12.0 to 15.12.1
+- [`6d588c8`](https://github.com/BetaHuhn/vuex-electron-store/commit/6d588c8)  Bump @typescript-eslint/parser from 4.26.0 to 4.26.1
+- [`b72f4c5`](https://github.com/BetaHuhn/vuex-electron-store/commit/b72f4c5)  Bump vue from 2.6.13 to 2.6.14
+- [`4d4f9e7`](https://github.com/BetaHuhn/vuex-electron-store/commit/4d4f9e7)  Bump @typescript-eslint/eslint-plugin from 4.26.0 to 4.26.1
+- [`081e9b0`](https://github.com/BetaHuhn/vuex-electron-store/commit/081e9b0)  Bump @types/node from 15.12.1 to 15.12.2
+
 ## [v1.2.1] - 2021-06-07
 
 [Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.2.1) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.2.0...v1.2.1) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.2.1) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.2.1.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.2.1.tar.gz))

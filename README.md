@@ -15,7 +15,7 @@ Persist and rehydrate the Vuex state in your Electron app.
 - 🔨 **Customization** - *specify what [parts of your Vuex state](#only-partially-persist-state) you want to persist and [which mutations are allowed](#filter-mutations)*
 - ♻️ **Migrations** - *the persisted state can be easily [migrated](#migration-between-versions) between different versions of your Electron app*
 - 🔐 **Encryption** - *you can optionally [encrypt](#%EF%B8%8F-options) the storage file with a encryption key*
-- ⚙️ **Electron main process** - *you can access the Vuex state and commit mutations/dispatch actions from the Electron main process*
+- ⚙️ **Electron main process** - *access the state & commit mutations/dispatch actions from the [Electron main process](https://www.electronjs.org/docs/tutorial/quick-start#run-the-main-process)*
 
 This library is a wrapper around [electron-store](https://github.com/sindresorhus/electron-store) to make it work directly with Vuex and offer additional features.
 
@@ -251,7 +251,7 @@ Don't store the key like this if security is of concern, the encryption key woul
 
 ### IPC Mode
 
-If you want to access the state or commit mutations/dispatch actions from the Electron main process, you need to enable `ipc` mode. 
+If you want to access the state or commit mutations/dispatch actions from the [Electron main process](https://www.electronjs.org/docs/tutorial/quick-start#run-the-main-process), you need to enable `ipc` mode. 
 
 You can then use the `.getStoreFromRenderer()` method in the main process to listen for an IPC connection from the renderer. Once connected you can use the returned `.commit()` and `.dispatch()` methods like you would in a normal Vue Component. Calling `.getState()` returns a promise containing the current Vuex state.
 
@@ -283,6 +283,8 @@ store.dispatch(action, payload)
 // Get the current Vuex State
 const state = await store.getState()
 ```
+
+> When you use `.getStoreFromRenderer()` you don't need to call `.initRenderer()`
 	
 </details>
 
@@ -586,7 +588,7 @@ The `state` parameter contains the persisted state before rehydration.
 
 ### Access the store from the Electron main process
 
-If you enable the [`ipc` mode](#ipc-mode) you can access the state or commit mutations/dispatch actions from the Electron main process:
+If you enable the [`ipc` mode](#ipc-mode) you can access the state or commit mutations/dispatch actions from the [Electron main process](https://www.electronjs.org/docs/tutorial/quick-start#run-the-main-process):
 
 ```js
 import PersistedState from 'vuex-electron-store'
@@ -602,6 +604,8 @@ store.dispatch(action, payload)
 // Get the current Vuex State
 const state = await store.getState()
 ```
+
+> When you use `.getStoreFromRenderer()` you don't need to call `.initRenderer()`
 
 ---
 

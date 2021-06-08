@@ -51,8 +51,9 @@ export interface Options<T> extends Pick<StoreOptions<T>, 'encryptionKey'> {
     */
     overwrite?: boolean;
     /**
-     * Check if the [electron-store](https://github.com/sindresorhus/electron-store) is available.
-     * Will run during the plugin's initialization and perform a Write-Read-Delete operation
+     * Check if the storage file is available and can be accessed
+     *
+     * Will run during the plugin's initialization and perform a Write-Read-Delete operation on the [electron-store](https://github.com/sindresorhus/electron-store)
      * @default true
     */
     checkStorage?: boolean;
@@ -127,6 +128,14 @@ export interface Options<T> extends Pick<StoreOptions<T>, 'encryptionKey'> {
      * By default a new one will be created automatically
     */
     storage?: Store<T>;
+    /**
+     * Enable IPC communication between renderer and main process.
+     *
+     * This is needed if you want to access the store from the main process using `.getStoreFromRenderer()`.
+     *
+     * @default false
+     */
+    ipc?: boolean;
 }
 interface MergeOptions extends SetRequired<DeepmergeOptions, 'isMergeableObject'> {
     cloneUnlessOtherwiseSpecified(value: Record<string, unknown>, options?: MergeOptions): any;

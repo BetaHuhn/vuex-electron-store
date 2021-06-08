@@ -12,6 +12,32 @@ declare class PersistedState<State extends Record<string, any> = Record<string, 
     checkStorage(): void;
     loadInitialState(): void;
     subscribeOnChanges(): void;
+    initIpcConnectionToMain(): void;
+    /**
+     * Listen for an IPC connection from the renderer and return an interface to it's Vuex Store.
+     *
+     * Requires `ipc` mode to be enabled in the plugin.
+     *
+     * Needs to be called in the main process and only supports one connected renderer.
+     * @returns {Object} Methods to interact with the renderer's Vuex Store
+     * @example
+     * ```
+        // In the main process
+        import PersistedState from 'vuex-electron-store'
+
+        const store = PersistedState.getStoreFromRenderer()
+
+        // Commit a mutation
+        store.commit(type, payload)
+
+        // Dispatch an action
+        store.dispatch(action, payload)
+
+        // Get the current Vuex State
+        const state = await store.getState()
+        ```
+    */
+    static getStoreFromRenderer(): any;
     /**
      * Create a new Vuex plugin which initializes the [electron-store](https://github.com/sindresorhus/electron-store), rehydrates the state and persistently stores any changes
      * @param {Options} Options - Configuration options

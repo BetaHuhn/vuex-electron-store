@@ -1,9 +1,11 @@
 import merge from 'deepmerge'
 import Store from 'electron-store'
 import Conf from 'conf'
+import { ipcMain, ipcRenderer } from 'electron-better-ipc'
+import { BrowserWindow } from 'electron'
 import { Store as VuexStore, MutationPayload, Plugin } from 'vuex'
 
-import { reducer, combineMerge } from './helpers'
+import { reducer, combineMerge, ipcEvents } from './helpers'
 import { Options, FinalOptions, Migrations } from './types'
 
 /**
@@ -22,7 +24,8 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 			arrayMerger: combineMerge,
 			overwrite: false,
 			checkStorage: true,
-			dev: false
+			dev: false,
+			ipc: false
 		}
 
 		this.opts = Object.assign({}, defaultOptions, inputOpts)
@@ -97,6 +100,89 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 		})
 	}
 
+	initIpcConnectionToMain(): void {
+		ipcRenderer.send(ipcEvents.CONNECT)
+
+		ipcRenderer.on(ipcEvents.COMMIT, (_event, { type, payload }) => {
+			this.store.commit(type, payload)
+		})
+
+		ipcRenderer.on(ipcEvents.DISPATCH, (_event, { type, payload }) => {
+			this.store.dispatch(type, payload)
+		})
+
+		ipcRenderer.answerMain(ipcEvents.GET_STATE, () => {			
+			return this.store.state
+		})
+	}
+
+	/**
+	 * Listen for an IPC connection from the renderer and return an interface to it's Vuex Store.
+	 * 
+	 * Requires `ipc` mode to be enabled in the plugin.
+	 * 
+	 * Needs to be called in the main process and only supports one connected renderer.
+	 * @returns {Object} Methods to interact with the renderer's Vuex Store
+	 * @example
+	 * ```
+	 	// In the main process
+		import PersistedState from 'vuex-electron-store'
+
+		const store = PersistedState.getStoreFromRenderer()
+
+		// Commit a mutation
+		store.commit(type, payload)
+
+		// Dispatch an action
+		store.dispatch(action, payload)
+
+		// Get the current Vuex State
+		const state = await store.getState()
+		```
+	*/
+	static getStoreFromRenderer(): any {
+		if (process.type === 'renderer') throw new Error('[Vuex Electron] Only call `.getStoreFromRenderer()` in the main process.')
+
+		// Init electron-store
+		this.initRenderer()
+
+		let connection: Electron.WebContents | undefined
+
+		ipcMain.on(ipcEvents.CONNECT, (event) => {
+			if (connection) throw new Error('[Vuex Electron] Already connected to one renderer.')
+
+			connection = event.sender
+
+			// Remove connection when window is closed
+			connection.on('destroyed', () => {
+				connection = undefined
+			})
+		})
+
+		const commit = (type: any, payload: any) => {
+			if (!connection) throw new Error('[Vuex Electron] Not connected to renderer.')
+
+			connection.send(ipcEvents.COMMIT, { type, payload })
+		}
+
+		const dispatch = (type: any, payload: any) => {
+			if (!connection) throw new Error('[Vuex Electron] Not connected to renderer.')
+
+			connection.send(ipcEvents.DISPATCH, { type, payload })
+		}
+
+		const getState = () => {
+			if (!connection) throw new Error('[Vuex Electron] Not connected to renderer.')
+
+			const win = BrowserWindow.fromWebContents(connection)
+			if (!win) throw new Error('[Vuex Electron] Cannot get BrowserWindow from WebContents.')
+
+			return ipcMain.callRenderer(win, ipcEvents.GET_STATE)
+		}
+
+		return { commit, dispatch, getState }
+	}
+
 	/**
 	 * Create a new Vuex plugin which initializes the [electron-store](https://github.com/sindresorhus/electron-store), rehydrates the state and persistently stores any changes
 	 * @param {Options} Options - Configuration options
@@ -130,6 +216,10 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 			if (!persistedState.opts.dev) {
 				persistedState.loadInitialState()
 				persistedState.subscribeOnChanges()
+			}
+
+			if (persistedState.opts.ipc) {
+				persistedState.initIpcConnectionToMain()
 			}
 		}
 	}

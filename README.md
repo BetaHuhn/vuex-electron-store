@@ -13,8 +13,9 @@ Persist and rehydrate the Vuex state in your Electron app.
 - 💾 **Persistent state** - *persistently stores the Vuex state in your Electron app*
 - 🔌 **Easy integration** - *integrates perfectly with Vue and Electron as a [Vuex Plugin](https://vuex.vuejs.org/guide/plugins.html)*
 - 🔨 **Customization** - *specify what [parts of your Vuex state](#only-partially-persist-state) you want to persist and [which mutations are allowed](#filter-mutations)*
-- ♻️ **Migration** - *the persisted state can be easily [migrated](#migration-between-versions) between different versions of your Electron app*
+- ♻️ **Migrations** - *the persisted state can be easily [migrated](#migration-between-versions) between different versions of your Electron app*
 - 🔐 **Encryption** - *you can optionally [encrypt](#%EF%B8%8F-options) the storage file with a encryption key*
+- ⚙️ **Electron main process** - *you can access the Vuex state and commit mutations/dispatch actions from the Electron main process*
 
 This library is a wrapper around [electron-store](https://github.com/sindresorhus/electron-store) to make it work directly with Vuex and offer additional features.
 
@@ -55,7 +56,7 @@ import PersistedState from 'vuex-electron-store'
 PersistedState.initRenderer()
 ```
 
-> Since Vuex only runs in the renderer, this is needed to setup the required `ipc` communication ([more info](https://github.com/sindresorhus/electron-store#initrenderer))
+> If you access the store from the main process (using `.getStoreFromRenderer()`) this is not needed
 
 And you are done! Your Electron app now has a persistent Vuex state! 🎉
 
@@ -86,7 +87,8 @@ PersistedState.create({
 | `encryptionKey` | `string/Buffer/TypedArray/DataView` | Encryption key used to encrypt the storage file | n/a |
 | `storageFileLocation` | `string` | Location where the storage file should be stored | [config directory](https://github.com/sindresorhus/env-paths#pathsconfig) |
 | `migrations` | `object` | Migration operations to perform to the persisted state whenever a version is upgraded | n/a |
-	
+| `ipc` | `boolean` | Enable IPC communication with the main process | `false` |
+
 </details>
 
 ## 🛠️ Configuration
@@ -242,6 +244,45 @@ PersistedState.create({
 ```
 
 Don't store the key like this if security is of concern, the encryption key would be easily found in the Electron app.
+	
+</details>
+
+---
+
+### IPC Mode
+
+If you want to access the state or commit mutations/dispatch actions from the Electron main process, you need to enable `ipc` mode. 
+
+You can then use the `.getStoreFromRenderer()` method in the main process to listen for an IPC connection from the renderer. Once connected you can use the returned `.commit()` and `.dispatch()` methods like you would in a normal Vue Component. Calling `.getState()` returns a promise containing the current Vuex state.
+
+> This can only be used with one renderer
+
+<details><summary>See Example</summary><br>
+
+Enable `ipc` mode:
+
+```js
+PersistedState.create({
+	ipc: true
+})
+```
+
+Then in the Electron main process:
+
+```js
+import PersistedState from 'vuex-electron-store'
+
+const store = PersistedState.getStoreFromRenderer()
+
+// Commit a mutation
+store.commit(type, payload)
+
+// Dispatch an action
+store.dispatch(action, payload)
+
+// Get the current Vuex State
+const state = await store.getState()
+```
 	
 </details>
 
@@ -542,6 +583,27 @@ export default new Vuex.Store({
 ```
 
 The `state` parameter contains the persisted state before rehydration.
+
+### Access the store from the Electron main process
+
+If you enable the [`ipc` mode](#ipc-mode) you can access the state or commit mutations/dispatch actions from the Electron main process:
+
+```js
+import PersistedState from 'vuex-electron-store'
+
+const store = PersistedState.getStoreFromRenderer()
+
+// Commit a mutation
+store.commit(type, payload)
+
+// Dispatch an action
+store.dispatch(action, payload)
+
+// Get the current Vuex State
+const state = await store.getState()
+```
+
+---
 
 ## 💻 Development
 

@@ -122,7 +122,7 @@ export interface Options<T> extends Pick<StoreOptions<T>, 'encryptionKey'> {
 		})
 		```
 	*/
-	migrations?:  Record<string, (state: T) => void>;
+	migrations?: Record<string, (state: T) => void>;
 
 	/**
 	 * Location where the storage file should be stored. 
@@ -141,6 +141,15 @@ export interface Options<T> extends Pick<StoreOptions<T>, 'encryptionKey'> {
 	 * By default a new one will be created automatically
 	*/
 	storage?: Store<T>;
+
+	/**
+	 * Enable IPC communication between renderer and main process.
+	 * 
+	 * This is needed if you want to access the store from the main process using `.getStoreFromRenderer()`.
+	 * 
+	 * @default false
+	 */
+	ipc?: boolean;
 }
 
 // Fix deepmerge types. Reference: https://git.io/JGtuC

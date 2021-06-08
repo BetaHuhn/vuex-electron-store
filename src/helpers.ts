@@ -29,3 +29,10 @@ export const reducer: Reducer<any> = (state, paths) => {
 
 	return state
 }
+
+export const ipcEvents = {
+	CONNECT: 'vuex-electron-store-connect',
+	COMMIT: 'vuex-electron-store-commit',
+	DISPATCH: 'vuex-electron-store-dispatch',
+	GET_STATE: 'vuex-electron-store-get-state'
+}

@@ -34,5 +34,6 @@ export const ipcEvents = {
 	CONNECT: 'vuex-electron-store-connect',
 	COMMIT: 'vuex-electron-store-commit',
 	DISPATCH: 'vuex-electron-store-dispatch',
-	GET_STATE: 'vuex-electron-store-get-state'
+	GET_STATE: 'vuex-electron-store-get-state',
+	CLEAR_STATE: 'vuex-electron-store-clear-state'
 }

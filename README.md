@@ -282,6 +282,9 @@ store.dispatch(type, payload, options)
 
 // Get the current Vuex State
 const state = await store.getState()
+
+// Reset the persisted State
+store.clearState()
 ```
 
 > When you use `.getStoreFromRenderer()` you don't need to call `.initRenderer()`
@@ -603,6 +606,9 @@ store.dispatch(type, payload, options)
 
 // Get the current Vuex State
 const state = await store.getState()
+
+// Reset the persisted State
+store.clearState()
 ```
 
 > When you use `.getStoreFromRenderer()` you don't need to call `.initRenderer()`

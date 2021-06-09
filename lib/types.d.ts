@@ -150,6 +150,10 @@ export interface StoreInterface {
      * Get the current state from the renderer's Vuex Store
      */
     getState: () => any;
+    /**
+     * Clear the persisted state
+     */
+    clearState: () => void;
 }
 interface MergeOptions extends SetRequired<DeepmergeOptions, 'isMergeableObject'> {
     cloneUnlessOtherwiseSpecified(value: Record<string, unknown>, options?: MergeOptions): any;

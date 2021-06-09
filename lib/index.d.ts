@@ -9,6 +9,7 @@ declare class PersistedState<State extends Record<string, any> = Record<string, 
     constructor(inputOpts: Options<State>, store: VuexStore<State>);
     getState(): any;
     setState(state: any): void;
+    clearState(): void;
     checkStorage(): void;
     loadInitialState(): void;
     subscribeOnChanges(): void;
@@ -35,6 +36,9 @@ declare class PersistedState<State extends Record<string, any> = Record<string, 
 
         // Get the current Vuex State
         const state = await store.getState()
+
+        // Reset the persisted State
+        store.clearState()
         ```
     */
     static getStoreFromRenderer(): StoreInterface;

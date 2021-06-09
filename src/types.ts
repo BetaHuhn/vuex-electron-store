@@ -167,6 +167,11 @@ export interface StoreInterface {
 	 * Get the current state from the renderer's Vuex Store
 	 */
 	getState: () => any;
+
+	/**
+	 * Clear the persisted state
+	 */
+	clearState: () => void;
 } 
 
 // Fix deepmerge types. Reference: https://git.io/JGtuC

@@ -65,6 +65,10 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 		this.opts.storage.set(this.opts.storageKey, state)
 	}
 
+	clearState() {
+		this.opts.storage.clear()
+	}
+
 	checkStorage(): void {
 		try {
 			const testKey = '@@'
@@ -92,7 +96,7 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 
 	subscribeOnChanges(): void {
 		this.store.subscribe((mutation: MutationPayload, state: any) => {
-			if (this.opts.resetMutation && mutation.type === this.opts.resetMutation) return this.setState({})
+			if (this.opts.resetMutation && mutation.type === this.opts.resetMutation) return this.clearState()
 
 			if (this.opts.filter && this.opts.filter(mutation)) return
 
@@ -109,6 +113,10 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 
 		ipcRenderer.on(ipcEvents.DISPATCH, (_event, { type, payload, options }) => {
 			this.store.dispatch(type, payload, options)
+		})
+
+		ipcRenderer.on(ipcEvents.CLEAR_STATE, () => {
+			this.clearState()
 		})
 
 		ipcRenderer.answerMain(ipcEvents.GET_STATE, () => {			
@@ -138,6 +146,9 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 
 		// Get the current Vuex State
 		const state = await store.getState()
+
+		// Reset the persisted State
+		store.clearState()
 		```
 	*/
 	static getStoreFromRenderer(): StoreInterface {
@@ -180,7 +191,13 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 			return ipcMain.callRenderer(win, ipcEvents.GET_STATE)
 		}
 
-		return { commit, dispatch, getState }
+		const clearState: StoreInterface['clearState'] = () => {
+			if (!connection) throw new Error('[Vuex Electron] Not connected to renderer.')
+
+			connection.send(ipcEvents.CLEAR_STATE)
+		}
+
+		return { commit, dispatch, getState, clearState }
 	}
 
 	/**

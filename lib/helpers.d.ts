@@ -6,4 +6,5 @@ export declare const ipcEvents: {
     COMMIT: string;
     DISPATCH: string;
     GET_STATE: string;
+    CLEAR_STATE: string;
 };

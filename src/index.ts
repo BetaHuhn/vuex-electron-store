@@ -160,8 +160,6 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 		let connection: Electron.WebContents | undefined
 
 		ipcMain.on(ipcEvents.CONNECT, (event) => {
-			if (connection) throw new Error('[Vuex Electron] Already connected to one renderer.')
-
 			connection = event.sender
 
 			// Remove connection when window is closed

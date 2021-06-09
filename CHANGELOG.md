@@ -1,3 +1,11 @@
+## [v1.4.1] - 2021-06-09
+
+[Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.4.1) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.4.0...v1.4.1) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.4.1) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.1.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.1.tar.gz))
+
+### Bug fixes
+
+- [`d0d4a58`](https://github.com/BetaHuhn/vuex-electron-store/commit/d0d4a58)  Drop existing connection when new renderer connects via IPC
+
 ## [v1.4.0] - 2021-06-09
 
 [Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.4.0) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.3.1...v1.4.0) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.4.0) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.0.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.0.tar.gz))

@@ -1,3 +1,11 @@
+## [v1.4.0] - 2021-06-09
+
+[Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.4.0) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.3.1...v1.4.0) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.4.0) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.0.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.0.tar.gz))
+
+### New features
+
+- [`2bb4803`](https://github.com/BetaHuhn/vuex-electron-store/commit/2bb4803)  Add clearState method to store interface
+
 ## [v1.3.1] - 2021-06-08
 
 [Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.3.1) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.3.0...v1.3.1) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.3.1) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.3.1.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.3.1.tar.gz))

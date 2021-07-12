@@ -1,3 +1,15 @@
+## [v1.4.6] - 2021-07-12
+
+[Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.4.6) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.4.5...v1.4.6) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.4.6) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.6.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.6.tar.gz))
+
+### Dependency updates
+
+- [`83c0200`](https://github.com/BetaHuhn/vuex-electron-store/commit/83c0200)  Bump eslint from 7.29.0 to 7.30.0
+- [`4c91be7`](https://github.com/BetaHuhn/vuex-electron-store/commit/4c91be7)  Bump @typescript-eslint/eslint-plugin from 4.28.1 to 4.28.2
+- [`4a2aa32`](https://github.com/BetaHuhn/vuex-electron-store/commit/4a2aa32)  Bump @typescript-eslint/parser from 4.28.1 to 4.28.2
+- [`bd0f248`](https://github.com/BetaHuhn/vuex-electron-store/commit/bd0f248)  Bump electron from 12.0.13 to 12.0.14
+- [`69112db`](https://github.com/BetaHuhn/vuex-electron-store/commit/69112db)  Bump type-fest from 1.2.1 to 1.2.2
+
 ## [v1.4.5] - 2021-07-05
 
 [Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.4.5) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.4.4...v1.4.5) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.4.5) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.5.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.5.tar.gz))

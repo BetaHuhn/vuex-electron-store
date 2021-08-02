@@ -1,6 +1,6 @@
 {
 	"name": "vuex-electron-store",
-	"version": "1.4.8",
+	"version": "1.4.9",
 	"description": "Persist and rehydrate the Vuex state in your Electron app",
 	"main": "./lib/index.js",
 	"types": "./lib/index.d.ts",

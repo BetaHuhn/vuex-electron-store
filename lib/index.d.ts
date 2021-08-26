@@ -41,7 +41,7 @@ declare class PersistedState<State extends Record<string, any> = Record<string, 
         store.clearState()
         ```
     */
-    static getStoreFromRenderer(): StoreInterface;
+    static getStoreFromRenderer(): Promise<StoreInterface | Error>;
     /**
      * Create a new Vuex plugin which initializes the [electron-store](https://github.com/sindresorhus/electron-store), rehydrates the state and persistently stores any changes
      * @param {Options} Options - Configuration options

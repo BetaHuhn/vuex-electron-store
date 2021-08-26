@@ -130,13 +130,15 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 	 * Requires `ipc` mode to be enabled in the plugin.
 	 * 
 	 * Needs to be called in the main process and only supports one connected renderer.
+	 * 
+	 * Note: Will timeout after 10 seconds if no renderer is connected.
 	 * @returns {Object} Methods to interact with the renderer's Vuex Store
 	 * @example
 	 * ```
 	 	// In the main process
 		import PersistedState from 'vuex-electron-store'
 
-		const store = PersistedState.getStoreFromRenderer()
+		const store = await PersistedState.getStoreFromRenderer()
 
 		// Commit a mutation
 		store.commit(type, payload, options)
@@ -151,51 +153,63 @@ class PersistedState<State extends Record<string, any> = Record<string, unknown>
 		store.clearState()
 		```
 	*/
-	static getStoreFromRenderer(): StoreInterface {
-		if (process.type === 'renderer') throw new Error('[Vuex Electron] Only call `.getStoreFromRenderer()` in the main process.')
+	static getStoreFromRenderer(): Promise<StoreInterface | Error> {
+		// Abitrary timeout to wait for the renderer to connect
+		const ipcTimeout = 10000
 
-		// Init electron-store
-		PersistedState.initRenderer()
+		const storePromise = new Promise((resolve) => {
+			if (process.type === 'renderer') throw new Error('[Vuex Electron] Only call `.getStoreFromRenderer()` in the main process.')
 
-		let connection: Electron.WebContents | undefined
+			// Init electron-store
+			PersistedState.initRenderer()
 
-		ipcMain.on(ipcEvents.CONNECT, (event) => {
-			connection = event.sender
+			let connection: Electron.WebContents | undefined
 
-			// Remove connection when window is closed
-			connection.on('destroyed', () => {
-				connection = undefined
+			const commit: StoreInterface['commit'] = (type: string, payload?: any, options?: CommitOptions) => {
+				if (!connection) throw new Error('[Vuex Electron] Not connected to renderer.')
+
+				connection.send(ipcEvents.COMMIT, { type, payload, options })
+			}
+
+			const dispatch: StoreInterface['dispatch'] = (type: string, payload?: any, options?: DispatchOptions) => {
+				if (!connection) throw new Error('[Vuex Electron] Not connected to renderer.')
+
+				connection.send(ipcEvents.DISPATCH, { type, payload, options })
+			}
+
+			const getState: StoreInterface['getState'] = () => {
+				if (!connection) throw new Error('[Vuex Electron] Not connected to renderer.')
+
+				const win = BrowserWindow.fromWebContents(connection)
+				if (!win) throw new Error('[Vuex Electron] Cannot get BrowserWindow from WebContents.')
+
+				return ipcMain.callRenderer(win, ipcEvents.GET_STATE)
+			}
+
+			const clearState: StoreInterface['clearState'] = () => {
+				if (!connection) throw new Error('[Vuex Electron] Not connected to renderer.')
+
+				connection.send(ipcEvents.CLEAR_STATE)
+			}
+
+			ipcMain.on(ipcEvents.CONNECT, (event) => {
+				connection = event.sender
+
+				resolve({ commit, dispatch, getState, clearState })
+
+				// Remove connection when window is closed
+				connection.on('destroyed', () => {
+					connection = undefined
+				})
 			})
 		})
 
-		const commit: StoreInterface['commit'] = (type: string, payload?: any, options?: CommitOptions) => {
-			if (!connection) throw new Error('[Vuex Electron] Not connected to renderer.')
+		// Reject if renderer takes more than ipcTimeout to connect
+		const timeout = new Promise((_r, reject) => setTimeout(() => {
+			reject(new Error('[Vuex Electron] Reached timeout while waiting for renderer to connect.'))
+		}, ipcTimeout))
 
-			connection.send(ipcEvents.COMMIT, { type, payload, options })
-		}
-
-		const dispatch: StoreInterface['dispatch'] = (type: string, payload?: any, options?: DispatchOptions) => {
-			if (!connection) throw new Error('[Vuex Electron] Not connected to renderer.')
-
-			connection.send(ipcEvents.DISPATCH, { type, payload, options })
-		}
-
-		const getState: StoreInterface['getState'] = () => {
-			if (!connection) throw new Error('[Vuex Electron] Not connected to renderer.')
-
-			const win = BrowserWindow.fromWebContents(connection)
-			if (!win) throw new Error('[Vuex Electron] Cannot get BrowserWindow from WebContents.')
-
-			return ipcMain.callRenderer(win, ipcEvents.GET_STATE)
-		}
-
-		const clearState: StoreInterface['clearState'] = () => {
-			if (!connection) throw new Error('[Vuex Electron] Not connected to renderer.')
-
-			connection.send(ipcEvents.CLEAR_STATE)
-		}
-
-		return { commit, dispatch, getState, clearState }
+		return Promise.race([ storePromise, timeout ]) as Promise<StoreInterface | Error>
 	}
 
 	/**

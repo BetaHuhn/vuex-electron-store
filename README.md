@@ -272,7 +272,7 @@ Then in the Electron main process:
 ```js
 import PersistedState from 'vuex-electron-store'
 
-const store = PersistedState.getStoreFromRenderer()
+const store = await PersistedState.getStoreFromRenderer()
 
 // Commit a mutation
 store.commit(type, payload, options)
@@ -596,7 +596,7 @@ If you enable the [`ipc` mode](#ipc-mode) you can access the state or commit mut
 ```js
 import PersistedState from 'vuex-electron-store'
 
-const store = PersistedState.getStoreFromRenderer()
+const store = await PersistedState.getStoreFromRenderer()
 
 // Commit a mutation
 store.commit(type, payload, options)

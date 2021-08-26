@@ -1,3 +1,16 @@
+## [v1.4.13] - 2021-08-26
+
+[Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.4.13) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.4.12...v1.4.13) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.4.13) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.13.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.13.tar.gz))
+
+### Bug fixes
+
+- [`0ecfee6`](https://github.com/BetaHuhn/vuex-electron-store/commit/0ecfee6)  Wait for the renderer to connect in ipc mode
+
+### Dependency updates
+
+- [`6586424`](https://github.com/BetaHuhn/vuex-electron-store/commit/6586424)  Bump @typescript-eslint/eslint-plugin from 4.29.2 to 4.29.3
+- [`f989e94`](https://github.com/BetaHuhn/vuex-electron-store/commit/f989e94)  Bump @typescript-eslint/parser from 4.29.2 to 4.29.3
+
 ## [v1.4.12] - 2021-08-23
 
 [Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.4.12) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.4.11...v1.4.12) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.4.12) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.12.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.12.tar.gz))

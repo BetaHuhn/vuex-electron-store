@@ -1,3 +1,11 @@
+## [v1.4.14] - 2021-08-30
+
+[Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.4.14) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.4.13...v1.4.14) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.4.14) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.14.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.14.tar.gz))
+
+### Dependency updates
+
+- [`7514ed9`](https://github.com/BetaHuhn/vuex-electron-store/commit/7514ed9)  Bump typescript from 4.3.5 to 4.4.2
+
 ## [v1.4.13] - 2021-08-26
 
 [Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.4.13) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.4.12...v1.4.13) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.4.13) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.13.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.13.tar.gz))

@@ -1,3 +1,11 @@
+## [v1.4.21] - 2021-10-25
+
+[Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.4.21) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.4.20...v1.4.21) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.4.21) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.21.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.21.tar.gz))
+
+### Dependency updates
+
+- [`26d3cbe`](https://github.com/BetaHuhn/vuex-electron-store/commit/26d3cbe)  Bump electron from 12.0.18 to 12.1.0
+
 ## [v1.4.20] - 2021-10-18
 
 [Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.4.20) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.4.19...v1.4.20) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.4.20) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.20.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.20.tar.gz))

@@ -1,3 +1,11 @@
+## [v1.4.22] - 2021-11-22
+
+[Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.4.22) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.4.21...v1.4.22) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.4.22) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.22.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.22.tar.gz))
+
+### Dependency updates
+
+- [`51cbe74`](https://github.com/BetaHuhn/vuex-electron-store/commit/51cbe74)  Bump typescript from 4.4.4 to 4.5.2
+
 ## [v1.4.21] - 2021-10-25
 
 [Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.4.21) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.4.20...v1.4.21) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.4.21) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.21.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.21.tar.gz))

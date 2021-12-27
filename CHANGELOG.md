@@ -1,3 +1,11 @@
+## [v1.4.25] - 2021-12-27
+
+[Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.4.25) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.4.24...v1.4.25) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.4.25) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.25.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.25.tar.gz))
+
+### Dependency updates
+
+- [`c1fcf71`](https://github.com/BetaHuhn/vuex-electron-store/commit/c1fcf71)  Bump tsc-watch from 4.5.0 to 4.6.0
+
 ## [v1.4.24] - 2021-12-20
 
 [Release notes](https://github.com/BetaHuhn/vuex-electron-store/releases/tag/v1.4.24) · [Compare](https://github.com/BetaHuhn/vuex-electron-store/compare/v1.4.23...v1.4.24) · [Tag](https://github.com/BetaHuhn/vuex-electron-store/tree/v1.4.24) · Archive ([zip](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.24.zip) · [tar.gz](https://github.com/BetaHuhn/vuex-electron-store/archive/v1.4.24.tar.gz))
